@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 
+
 def read_extrel(fname):
     """ Reads scan data from a csv file. Returns a pandas dataframe where:
             Each column is a scan
@@ -22,39 +23,30 @@ def read_extrel(fname):
     scan_start.append(len(data.index))
     data = data.append({"Masses": "Masses", "Intensities": "Intensities"} , ignore_index=True)
 
+    #get the Masses
+    raw_amu = data["Masses"][1:scan_start[1]].astype("float64")
+    scan_table_raw = pd.DataFrame(index=raw_amu)
     #we need to look at each scan on its own. Here we move the data for each scan into its own dataframe.
     scan_data = []
     for i in range(nscans):
         #index range of current scan
         start_i, end_i = scan_start[i]+1, scan_start[i+1]
         #save the data for the scan
-        scan_amu = data["Masses"][start_i:end_i]
-        scan_inten = data["Intensities"][start_i:end_i]
-        scan = pd.DataFrame({"Masses": scan_amu, "Intensities": scan_inten})
-
-        scan_data.append(scan)
+        scan_inten = data["Intensities"][start_i:end_i].astype("float64").to_list()
+        scan_table_raw[i] = scan_inten
 
     #get a list of integer masses from min to max
-    amu_data = scan_data[1]["Masses"].astype('float64')
-    amu_min, amu_max = int(min(amu_data)), int(max(amu_data))
+    amu_min, amu_max = int(min(scan_table_raw.index)), int(max(scan_table_raw.index))
     amu_data = list(range(amu_min, amu_max + 1))
+    scan_table = pd.DataFrame(columns=range(nscans), index=amu_data)
 
+    scan_table_raw.index = scan_table_raw.index.to_series().round()
     #create a dataframe for the consolidated scan data.
     #columns are scans and each row is atomic mass
-    scan_table = pd.DataFrame({})
-    scan_number = 1
-    for scan in scan_data:
-        #round the amu's for this scan_amu
-        scan["Masses"] = scan["Masses"].astype("float64").round()
-        scan["Intensities"] = scan["Intensities"].astype("float64")
-        intensities = []
-        for i in range(amu_min, amu_max + 1):
-            #sum all intensities with at a given amu
-            amu_intensities = scan["Intensities"][scan["Masses"]==i]
-            intensities.append(sum(amu_intensities))
-        scan_table[scan_number] = pd.Series(intensities)
-        scan_number += 1
-    scan_table.index=amu_data
+    for i in range(amu_min, amu_max + 1):
+        #sum all intensities with at a given amu
+        s=scan_table_raw.loc[scan_table_raw.index==i].sum()
+        scan_table.loc[i] = s
     return scan_table
 
 def analyze(dir, bg_start, bg_end, amu_list):
@@ -122,6 +114,13 @@ def signal_strength(integral, dose):
     num_e = dose/e_charge
     return integral/num_e
 
+def parse_test(testfile):
+    from timeit import default_timer as timer
+    start = timer()
+    read_extrel(testfile)
+    end = timer()
+    return end-start
 if __name__ == "__main__":
-    testfile = "C:/Extrel/data/My Files/KA_OS4_S1dt8.txt"
-    print(read_extrel(testfile))
+    """For testing"""
+    testfile = "C:/Users/Owner/Documents/Work/Research/AnalysisTest/KA_OS4_S1dt8.txt"
+    print(parse_test(testfile))
