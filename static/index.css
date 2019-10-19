@@ -1,0 +1,53 @@
+
+
+body{
+  background-color: #eeeeee;
+}
+
+#page{
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 50px 0;
+}
+
+#header{
+  margin: 0px;
+  background: #FFFFFF;
+  border: 2px solid black;
+  padding: 10px;
+  box-shadow: 10px 10px 8px #888888;
+}
+
+#sidebar{
+  padding: 10px;
+  margin: 0px;
+  padding-top: 30px;
+  border: 2px solid black;
+  background: #313540;
+  height: 100%;
+}
+
+#content{
+  margin-top: 15px;
+}
+
+.uicard{
+  margin-top: 15px;
+  border: 3px solid black;
+  border-radius: 5px;
+}
+
+.sidebar-menuitem{
+  margin-bottom: 10px;
+
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #e1e4e8;
+  border-left: 4px solid #313540;
+  /* border-radius: 3px; */
+}
+.sidebar-menuitem:hover{
+  border-left: 4px solid #2e88ff;
+
+}
