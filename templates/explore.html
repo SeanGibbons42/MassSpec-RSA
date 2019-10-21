@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+
+{% block resources%}
+  <link rel="stylesheet" href="../static/explore.css">
+{% endblock %}
+
+{% block appcontent %}
+  <div class="row">
+  <div class="col">
+    <h2> Explore Data </h2>
+  </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="row">
+          <div class="col uicard" id="graph">
+            <div class="row">
+            <div class="col">
+              <h3> Graph </h3>
+            </div>
+            </div>
+
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col uicard" id="analysis-settings">
+          <div class="row">
+          <div class="col">
+            <h3> Analysis Settings </h3>
+          </div>
+          </div>
+          <div class="row" style="margin-left:1vw; margin-right:1vw;">
+            <div class="col-lg-3">
+              <label for="bgstart">BG Start [Scan#]</label>
+              <input type="text" name="bgstart" class="form-control" value="">
+            </div>
+            <div class="col-lg-3">
+              <label for="bgend">BG End [Scan#]</label>
+              <input type="text" name="bgend" class="form-control" value="">
+            </div>
+            <div class="col-lg-3">
+              <label for="beam-current">Beam Curr. [uA]</label>
+              <input type="text" name="beam-current" class="form-control" value="">
+            </div>
+            <div class="col-lg-3">
+              <label for="exp-time">Exp. Time [s]</label>
+              <input type="text" name="exp-time" class="form-control" value="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4" style="display:flex">
+      <div class="uicard" id=graph-controls>
+        <div class="row">
+        <div class="col">
+          <h2> Graph Controls </h2>
+        </div>
+        </div>
+        <hr>
+        
+        <div class="row">
+          <div class="col" style="margin: 0px 10px;">
+            <select class="custom-select" name="file-select">
+              <option value="File 1">File 1</option>
+              <option value="File 2">File 2</option>
+              <option value="File 3">File 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

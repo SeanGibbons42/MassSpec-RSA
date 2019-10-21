@@ -1,0 +1,12 @@
+#graph{
+  height: 47vh;
+}
+
+#graph-controls{
+  height: 68vh;
+}
+
+#analysis-settings{
+  min-height: 0px;
+  height: 18vh;
+}

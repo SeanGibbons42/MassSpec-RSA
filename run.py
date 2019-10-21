@@ -6,7 +6,7 @@ app.debug = True
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("upload.html")
+    return render_template("explore.html")
 
 if __name__ == '__main__':
     app.run()

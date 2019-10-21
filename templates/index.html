@@ -5,8 +5,11 @@
     <title>Mass Spec Central</title>
     <link rel="stylesheet" href="../static/bootstrap.min.css">
     <link rel="stylesheet" href="../static/index.css">
-    <script type="text/javascript" href = "../static/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" href = "../static/bootstrap.min.js"></script>
+    <script type="text/javascript" src = "../static/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src = "../static/bootstrap.min.js"></script>
+    <script type="text/javascript" src = "../static/index.js"></script>
+    
+    {% block resources %} {% endblock %}
   </head>
 
   <body>
@@ -23,8 +26,9 @@
       <div class="row">
         <div class="col-lg-2">
           <div class="" id="sidebar">
-            <div class="sidebar-menuitem">Import Data</div>
-            <div class="sidebar-menuitem">Analysis</div>
+            <div class="sidebar-menuitem">Import</div>
+            <div class="sidebar-menuitem">Explore</div>
+            <div class="sidebar-menuitem">Analyze</div>
           </div>
         </div>
         <div class="col-lg-10">

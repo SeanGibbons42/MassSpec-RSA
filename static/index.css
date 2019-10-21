@@ -29,15 +29,36 @@ body{
 
 #content{
   margin-top: 15px;
+  max-height: 80vh;
+}
+
+#filelist{
+  height: 45vh;
+  overflow: auto;
 }
 
 .uicard{
-  margin: 15px;
+  margin: 1.5vh 1.5vh;
   padding: 10px;
   border: 2px solid black;
   box-shadow: 10px 10px 8px #888888;
   width: 100%;
-  min-height: 200px;
+  min-height: 25vh;
+}
+
+.fileselect{
+  /* display: flex; */
+  padding: 0px 20px;
+}
+
+
+.fileselect-btn-col{
+  padding: 0px 40px;
+}
+
+.filelist{
+  border: 1px solid black;
+  padding: 0px 20px;
 }
 
 .sidebar-menuitem{
@@ -52,5 +73,4 @@ body{
 }
 .sidebar-menuitem:hover{
   border-left: 4px solid #2e88ff;
-
 }

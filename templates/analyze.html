@@ -1,5 +1,92 @@
 {%extends "index.html"%}
 
-{%block appcontent%}
+{% block resources %}
+  <link rel="stylesheet" href="../static/analyze.css">
+{% endblock %}
 
+{%block appcontent%}
+  <div class="row">
+    <div class="col">
+      <h2>Analyze Data</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-7">
+      <div class="row">
+        <div class="col uicard" id="review">
+          <div class="row">
+            <div class="col">
+              <h3>Review Settings</h3>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <table class="table" id="preview-table">
+                <thead class="thead">
+                  <th>BG Start [Scan #]</th>
+                  <th>BG End  [Scan #]</th>
+                  <th>Beam Current [uA]</th>
+                  <th>Exposure Time [s]</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0</td>
+                    <td>75</td>
+                    <td>0.001</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6" ></div>
+            <div class="col-lg-6 fileselect-btn-col">
+              <button type="button" name="button" class="btn btn-outline-secondary w-100">Update</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col uicard" id="savedata">
+          <div class="row">
+            <div class="col">
+              <h3>Save Data</h3>
+            </div>
+          </div>
+          <div class="row fileselect">
+            <div class="col-lg-12">
+              <label for="savepath">Choose a File:</label> <br>
+                <div class="input-group">
+                  <input type="text" name="savepath" class="form-control" value="">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Browse</button>
+                  </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6" ></div>
+            <div class="col-lg-6 fileselect-btn-col">
+              <button type="button" name="button" class="btn btn-outline-secondary w-100">Run</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-lg-5">
+      <div class="row">
+        <div class="col uicard" id="output">
+          <h3>Output</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 {%endblock%}

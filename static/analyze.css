@@ -1,0 +1,23 @@
+#savedata{
+  height: 25vh;
+}
+
+#review{
+  height: 25vh;
+}
+
+#output{
+  height: 53vh;
+}
+
+#preview-table{
+  margin-top: 1vh;
+}
+th{
+  font-size: 12px;
+  text-align: center;
+}
+
+td{
+  text-align: center;
+}
