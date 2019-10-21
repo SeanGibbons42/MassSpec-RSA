@@ -49,6 +49,9 @@ def read_extrel(fname):
         scan_table.loc[i] = s
     return scan_table
 
+def read_msd(path):
+    return pd.read_csv(path, index_col="index")
+
 def analyze(dir, bg_start, bg_end, amu_list):
     exposures = load_all(dir)
     integral_dict = {}
