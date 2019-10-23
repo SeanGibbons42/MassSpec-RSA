@@ -32,7 +32,7 @@ def read_extrel(fname):
         #index range of current scan
         start_i, end_i = scan_start[i]+1, scan_start[i+1]
         #save the data for the scan
-        scan_inten = data["Intensities"][start_i:end_i].astype("float64").to_list()
+        scan_inten = data["Intensities"][start_i:end_i].astype("float64").tolist()
         scan_table_raw[i] = scan_inten
 
     #get a list of integer masses from min to max
@@ -127,3 +127,4 @@ if __name__ == "__main__":
     """For testing"""
     testfile = "C:/Users/Owner/Documents/Work/Research/AnalysisTest/KA_OS4_S1dt8.txt"
     print(parse_test(testfile))
+    print(read_extrel(testfile))

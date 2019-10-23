@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import data
 from model import AppModel
-from flask import Flask, Response, render_template, jsonify
+from flask import Flask, Response, request, render_template, jsonify
 
 app = Flask(__name__)
 app.debug = True
@@ -26,40 +26,45 @@ def validate_file(path, fname):
 
 #Page routes
 @app.route("/", methods=["GET"])
-def upload():
+def upload_page():
     """ return homepage [file upload] """
     return render_template("upload.html")
 
 @app.route("/explore", methods=["GET"])
-def explore():
+def explore_page():
     """ returns the exploratory analysis page """
     return render_template("explore.html")
 
 @app.route("/analyze", methods=["GET"])
-def analyze():
+def analyze_page():
     """ returns the analysis and results page """
     return render_template("analyze.html")
 
 
 #AJAX Routes
 @app.route("/upload-folder", methods=["GET"])
-def load():
+def upload():
     """ returns a list of file """
-    path = request["path"]
+    path = request.args["path"]
     appmodel.datafolder = path
-    return Response(json.dumps(os.listdir(path)), mimetype="application/json")
+    try:
+        return Response(json.dumps(os.listdir(path)), mimetype="application/json")
+    except FileNotFoundError:
+        return Response("FileNotFoundError", status=404)
 
 @app.route("/transform", methods=["POST"])
 def transform():
-    inpath = request["inpath"]
-    outpath = request["outpath"]
+    inpath = request.form["inpath"]
+    outpath = request.form["outpath"]
     appmodel.transfolder = outpath
     infiles = os.listdir(inpath)
     #convert all the data and re-save using the ms
     for infile in infiles:
-        exposure_data = data.read_extrel(inpath+"/"+file)
-        outfile = file.replace(".txt", ".msd")
-        pd.to_csv(outpath+"/"+outfile, index_label="index")
+        print(inpath+"/"+infile)
+        exposure_data = data.read_extrel(inpath+"/"+infile)
+        outfile = infile.replace(".txt", ".msd")
+        exposure_data.to_csv(outpath+"/"+outfile, index_label="index")
+    return Response("saved", status=200)
 
 @app.route("/data", methods=["GET"])
 def get_data():

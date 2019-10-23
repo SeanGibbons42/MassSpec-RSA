@@ -26,9 +26,9 @@
       <div class="row">
         <div class="col-lg-2">
           <div class="" id="sidebar">
-            <div class="sidebar-menuitem">Import</div>
-            <div class="sidebar-menuitem">Explore</div>
-            <div class="sidebar-menuitem">Analyze</div>
+            <div class="sidebar-menuitem" id="import-tab"> <a href="{{ url_for('upload_page') }}">Import</a> </div>
+            <div class="sidebar-menuitem" id="explore-tab"> <a href="{{ url_for('explore_page') }}">Explore</a> </div>
+            <div class="sidebar-menuitem" id="analyze-tab"> <a href="{{ url_for('analyze_page') }}">Analyze</a> </div>
           </div>
         </div>
         <div class="col-lg-10">

@@ -72,5 +72,8 @@ body{
   /* border-radius: 3px; */
 }
 .sidebar-menuitem:hover{
+}
+
+.sidebar-menuitem-active{
   border-left: 4px solid #2e88ff;
 }

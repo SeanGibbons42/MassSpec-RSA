@@ -1,5 +1,9 @@
 $(document).ready(function(){
-  for(i=0; i<=20; i++){
-    $("#filelist").append("<p>Datas</p>");
-  }
+
 });
+
+function reset_menubar(){
+  $("#import-tab").removeClass("sidebar-menuitem-active")
+  $("#explore-tab").removeClass("sidebar-menuitem-active")
+  $("#analyze-tab").removeClass("sidebar-menuitem-active")
+}
