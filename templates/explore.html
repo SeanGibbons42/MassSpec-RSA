@@ -2,6 +2,10 @@
 
 {% block resources%}
 <link rel="stylesheet" href="../static/explore/explore.css">
+<script type="text/javascript">
+  amu_url = "{{url_for('update_amus')}}"
+  inten_url = "{{url_for('intensities')}}"
+</script>
 <script type="text/javascript" src="../static/explore/explore.js"></script>
 {% endblock %}
 
@@ -15,11 +19,18 @@
   <div class="row">
     <div class="col-lg-8">
       <div class="row">
-          <div class="col uicard" id="graph">
-            <div class="row">
+          <div class="col uicard" id="graph-card">
+            <div class="row h-30">
             <div class="col">
               <h3> Graph </h3>
             </div>
+            </div>
+            <div class="row h-70">
+              <div class="col">
+                <div class="" id="graph">
+
+                </div>
+              </div>
             </div>
 
           </div>
@@ -65,11 +76,46 @@
 
         <div class="row">
           <div class="col" style="margin: 0px 10px;">
-            <select class="custom-select" name="file-select">
-              <option value="File 1">File 1</option>
-              <option value="File 2">File 2</option>
-              <option value="File 3">File 3</option>
+            <select class="custom-select" name="file-select" id='file-select'>
+              {% for filename in filelist %}
+                <option value="{{filename}}">{{filename}}</option>
+              {% endfor %}
             </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col amu-range">
+            <p>Min Amu - 0</p>
+          </div>
+          <div class="col amu-range">
+            <p>Max Amu - 50</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" >
+            <div class="" id="amu-menu">
+              <table class="table">
+                <thead>
+                  <th>AMU</th>
+                  <th>Remove</th>
+                </thead>
+                <tbody id="amu-table">
+                  <!-- Table will befilled by javascript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="input-group amu-add">
+              <input type="text" class="form-control" name="amu" id="amu-select">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary" id="amu-select-btn">+</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -10,3 +10,7 @@ class AppModel():
             "beam_current":0,
             "exposure_time":0,
         }
+
+        self.amus = []
+        self.open_file_name = ""
+        self.open_file = None

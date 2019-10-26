@@ -33,7 +33,9 @@ def upload_page():
 @app.route("/explore", methods=["GET"])
 def explore_page():
     """ returns the exploratory analysis page """
-    return render_template("explore.html")
+    path = appmodel.datafolder
+    filelist = os.listdir(path) if path else []
+    return render_template("explore.html", filelist = filelist)
 
 @app.route("/analyze", methods=["GET"])
 def analyze_page():
@@ -65,6 +67,7 @@ def transform():
         outfile = infile.replace(".txt", ".msd")
         exposure_data.to_csv(outpath+"/"+outfile, index_label="index")
     return Response("saved", status=200)
+
 
 @app.route("/data", methods=["GET"])
 def get_data():
@@ -102,5 +105,42 @@ def run_analysis():
 
     return jsonify(list)
 
+#Application state
+@app.route("/amu", methods=["GET","POST"])
+def update_amus():
+    if request.method =="GET":
+        return jsonify(appmodel.amus)
+
+    elif request.method == "POST":
+        op = request.form["operation"]
+        value = request.form["amu"]
+        if op == "add":
+            if not value in appmodel.amus:
+                appmodel.amus.append(int(value))
+
+        elif op == "delete":
+            print("DELETE")
+            value = int(value)
+            if value in appmodel.amus:
+                i = appmodel.amus.index(value)
+                del appmodel.amus[i]
+
+        return Response("success", status=200)
+
+@app.route("/inten", methods=["GET"])
+def intensities():
+    filename = request.args["file"]
+    amu  = int(request.args["amu"])
+
+    if filename == appmodel.open_file_name:
+        file = appmodel.open_file
+
+    else:
+        path = appmodel.datafolder+"/"+filename
+        file = data.read_extrel(path)
+        appmodel.open_file = file
+        appmodel.open_file_name = filename
+
+    return jsonify({"amus":file.loc[amu].tolist(), "scans":file.columns.tolist()})
 if __name__ == '__main__':
     app.run()

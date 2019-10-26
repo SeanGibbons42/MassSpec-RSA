@@ -1,12 +1,41 @@
+.amu-range{
+  font-size: 1em;
+  font-weight: lighter;
+  text-align: center;
+  margin-top: 1em;
+}
+
+.amu-add{
+  margin-top: 0.8em
+}
+
+th{
+  text-align: center;
+}
+
+td{
+  text-align: center;
+}
+
+#amu-menu{
+  height: 350px;
+  border: 1px solid black;
+  border-radius: 4px;
+  overflow-y: scroll;
+}
+
+#graph-card{
+
+}
 #graph{
-  height: 47vh;
+  height: 400px
 }
 
 #graph-controls{
-  height: 68vh;
+  /* height: 68vh; */
 }
 
 #analysis-settings{
   min-height: 0px;
-  height: 18vh;
+  /* height: 18vh; */
 }
