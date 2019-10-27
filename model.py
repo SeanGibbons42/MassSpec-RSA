@@ -6,9 +6,9 @@ class AppModel():
         self.outputfolder = ""
         self.analysis_params = {
             "bg_start":0,
-            "bg_end":0,
-            "beam_current":0,
-            "exposure_time":0,
+            "bg_end":75,
+            "beam_current":0.1,
+            "exposure_time":2,
         }
 
         self.amus = []

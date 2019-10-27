@@ -13,6 +13,8 @@
 #preview-table{
   margin-top: 1vh;
 }
+
+/* table styles */
 th{
   font-size: 12px;
   text-align: center;
@@ -20,4 +22,14 @@ th{
 
 td{
   text-align: center;
+}
+
+
+/* These blocks allow input-group labels to have equal size. */
+.input-append {
+    flex: 0 0 30%;
+}
+.input-append .input-group-text {
+    width: 100%;
+    justify-content: center;
 }

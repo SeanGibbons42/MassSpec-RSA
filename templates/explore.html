@@ -6,6 +6,7 @@
   amu_url = "{{url_for('update_amus')}}"
   inten_url = "{{url_for('intensities')}}"
 </script>
+<script type="text/javascript" src = "../static/dependencies/d3.min.js"></script>
 <script type="text/javascript" src="../static/explore/explore.js"></script>
 {% endblock %}
 
@@ -36,33 +37,7 @@
           </div>
       </div>
 
-      <div class="row">
-        <div class="col uicard" id="analysis-settings">
-          <div class="row">
-          <div class="col">
-            <h3> Analysis Settings </h3>
-          </div>
-          </div>
-          <div class="row" style="margin-left:1vw; margin-right:1vw;">
-            <div class="col-lg-3">
-              <label for="bgstart">BG Start [Scan#]</label>
-              <input type="text" name="bgstart" class="form-control" value="">
-            </div>
-            <div class="col-lg-3">
-              <label for="bgend">BG End [Scan#]</label>
-              <input type="text" name="bgend" class="form-control" value="">
-            </div>
-            <div class="col-lg-3">
-              <label for="beam-current">Beam Curr. [uA]</label>
-              <input type="text" name="beam-current" class="form-control" value="">
-            </div>
-            <div class="col-lg-3">
-              <label for="exp-time">Exp. Time [s]</label>
-              <input type="text" name="exp-time" class="form-control" value="">
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
 
     <div class="col-lg-4" style="display:flex">

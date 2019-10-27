@@ -2,7 +2,12 @@
 
 {% block resources %}
 <link rel="stylesheet" href="../static/analyze/analyze.css">
+<script type="text/javascript">
+  analysisSettingURL = "{{url_for('analysis_settings')}}";
+  analysisURL = "{{url_for('run_analysis')}}"
+</script>
 <script type="text/javascript" src="../static/analyze/analyze.js"></script>
+
 {% endblock %}
 
 {%block appcontent%}
@@ -13,45 +18,59 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-7">
+    <div class="col-lg-8 col-md-8">
       <div class="row">
-        <div class="col uicard" id="review">
+        <div class="col uicard" id="analysis-settings">
           <div class="row">
-            <div class="col">
-              <h3>Review Settings</h3>
+          <div class="col">
+            <h3> Analysis Settings </h3>
+          </div>
+          </div>
+          <div class="row" style="margin-left:1vw; margin-right:1vw;">
+            <div class="col-lg-6 col-md-6">
+              <label for="bgstart">Background Start</label>
+              <div class="input-group">
+                <input type="text" id="bgstart" class="form-control" value="">
+                <div class="input-group-append input-append">
+                  <span class="input-group-text">Scan #</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <label for="beamcurrent">Beam Current</label>
+              <div class="input-group">
+                <input type="text" id="beamcurrent" class="form-control">
+                <div class="input-group-append input-append">
+                  <span class="input-group-text">uAmp</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col">
-              <table class="table" id="preview-table">
-                <thead class="thead">
-                  <th>BG Start [Scan #]</th>
-                  <th>BG End  [Scan #]</th>
-                  <th>Beam Current [uA]</th>
-                  <th>Exposure Time [s]</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>0</td>
-                    <td>75</td>
-                    <td>0.001</td>
-                    <td>2</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="row" style="margin-left:1vw; margin-right:1vw;">
+            <div class="col-lg-6 col-md-6">
+              <label for="bgend">Background End</label>
+              <div class="input-group">
+                <input type="text" id="bgend" class="form-control" value="">
+                <div class="input-group-append input-append">
+                  <span class="input-group-text">Scan #</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <label for="exptime">Exposure Time</label>
+              <div class="input-group">
+                <input type="text" id="exptime" class="form-control" value="">
+              <div class="input-group-append input-append">
+                <span class="input-group-text">sec.</span>
+              </div>
+            </div>
+
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-lg-6" ></div>
-            <div class="col-lg-6 fileselect-btn-col">
-              <button type="button" name="button" class="btn btn-outline-secondary w-100">Update</button>
-            </div>
-          </div>
-
         </div>
       </div>
+
       <div class="row">
         <div class="col uicard" id="savedata">
           <div class="row">
@@ -63,18 +82,19 @@
             <div class="col-lg-12">
               <label for="savepath">Choose a File:</label> <br>
                 <div class="input-group">
-                  <input type="text" name="savepath" class="form-control" value="">
+                  <input type="text" id="savepath" class="form-control" value="">
                   <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Browse</button>
+                    <button class="btn btn-outline-secondary"  id="analysis-file-but" type="button">Browse</button>
                   </div>
               </div>
               <hr>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6" ></div>
-            <div class="col-lg-6 fileselect-btn-col">
-              <button type="button" name="button" class="btn btn-outline-secondary w-100">Run</button>
+            <div class="col-lg-6 col-md-6" ></div>
+            <div class="col-lg-6 col-md-6 fileselect-btn-col">
+              <button type="button" class="btn btn-outline-secondary w-100">Run</button>
+              <input type='file' name='file' multiple id="analysis-file-dialog" style="visibility: hidden">
             </div>
           </div>
         </div>
@@ -82,7 +102,7 @@
 
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-lg-4 col-md-4">
       <div class="row">
         <div class="col uicard" id="output">
           <h3>Output</h3>

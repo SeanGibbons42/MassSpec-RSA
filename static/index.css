@@ -4,6 +4,14 @@ body{
   background-color: #eeeeee;
 }
 
+span{
+  user-select:none;
+}
+
+h2, h3{
+  user-select: none;
+}
+
 #page{
   margin: 0 auto;
   max-width: 1200px;
