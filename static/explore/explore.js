@@ -7,7 +7,7 @@ $(document).ready(function(){
   getAMU();
   $("#explore-tab").addClass("sidebar-menuitem-active");
   $("#amu-select-btn").click(function(){addAMU();});
-  $("#file-select").click(function(){changeFile();})
+  $("#file-select").click(function(){changeFile();});
   window.addEventListener("resize", displayGraph);
 });
 

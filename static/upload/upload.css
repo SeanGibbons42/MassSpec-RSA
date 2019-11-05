@@ -1,0 +1,29 @@
+.folder-btn{
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+
+.folder-active{
+  border-left: 3px solid #2e88ff;
+  border-right: 3px solid #2e88ff;
+}
+
+#folderlist{
+  width:100%;
+  padding:15px;
+  height:225px;
+  overflow-y: scroll;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+#folder-display{
+  height: 300px;
+}
+#import-display{
+  height: 150px;
+}
+#file-display{
+  height: 472px;
+}

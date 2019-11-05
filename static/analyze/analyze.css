@@ -1,17 +1,15 @@
-#savedata{
-  height: 25vh;
-}
 
-#review{
-  height: 25vh;
+#analysis-settings{
+  height: 500px;
 }
 
 #output{
-  height: 53vh;
+  height: 500px;
 }
 
-#preview-table{
-  margin-top: 1vh;
+#analysis-btn{
+   width: 100%;
+   margin-top: 10px;
 }
 
 /* table styles */
@@ -32,4 +30,8 @@ td{
 .input-append .input-group-text {
     width: 100%;
     justify-content: center;
+}
+
+.analysis-row{
+  margin: 15px 5px;
 }

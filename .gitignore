@@ -1,4 +1,6 @@
 *.pyc
 venv
+uploads
+output
 .ipynb_checkpoints
 MassSpec-RSA-checkpoint.ipynb

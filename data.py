@@ -52,31 +52,36 @@ def read_extrel(fname):
 def read_msd(path):
     return pd.read_csv(path, index_col="index")
 
-def analyze(dir, bg_start, bg_end, amu_list):
+def analyze(dir, bgstart, bgend, exptime, beamcurrent, amulist):
     exposures = load_all(dir)
-    integral_dict = {}
-    for amu in amu_list:
-        integral_dict[amu] = []
+    filenames = os.listdir(dir)
 
-    for filetable in exposures:
-        inten_list = []
-        for amu in amu_list:
-            inten_list.append(filetable.loc[amu])
+    dataByFile = {}
+    for file in filenames:
+        dataByAmu = {}
+        exposureData = exposures[file]
 
-        bg_inten_list = bg_subtract_file(inten_list, bg_start, bg_end)
-        integral_list = integrate_file(bg_inten_list)
-        for i in range(len(amu_list)):
-            integral_dict[amu].append(integral_list[i])
-    return integral_list
+        for amu in amulist:
+            amuData = exposureData.loc[amu]
+            amuData = bg_subtract(amuData, bgstart, bgend)
+            integral = integrate(amuData)
+            nelectron = (beamcurrent*exptime)/1.602e-19
+            signal = integral/nelectron
+
+            #signal here ->
+            dataByAmu[amu] = {"integral": integral, "signal": signal}
+        dataByFile[file] = dataByAmu
+    print(dataByFile)
+    return dataByFile
 
 def load_all(dir):
     """returns a list of data extracted from all exposure files. One element=one exposure"""
     fnames = os.listdir(dir)
-    exposures=[]
+    exposures={}
     for fname in fnames:
         path = dir+"/"+fname
         table = read_extrel(path)
-        exposures.append(table)
+        exposures[fname] = table
     return exposures
 
 def bg_subtract_file(inten_list, bg_start, bg_end):

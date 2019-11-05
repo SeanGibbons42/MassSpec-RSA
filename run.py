@@ -4,9 +4,16 @@ import pandas as pd
 import data
 from model import AppModel
 from flask import Flask, Response, request, render_template, jsonify, send_from_directory
+from werkzeug import secure_filename
 
 app = Flask(__name__)
 app.debug = True
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLD_NAME = "uploads"
+OUTPUT_FOLD_NAME = "output"
+app.config['UPLOAD_FOLDER'] = os.path.join(APP_ROOT, UPLOAD_FOLD_NAME)
+app.config['OUTPUT_FOLDER'] = os.path.join(APP_ROOT, OUTPUT_FOLD_NAME)
 
 #appmodel will keep track of application state.
 appmodel = AppModel()
@@ -22,7 +29,26 @@ def validate_file(path, fname):
             data.read_extrel(path+"/"+fname)
             return True
         except:
-            return False
+            return
+
+def save_output(data):
+    files = sorted(list(data.keys()))
+    amus  = sorted(list(data[files[0]].keys()))
+
+    intData = pd.DataFrame(columns=amus, index=files)
+    sigData = pd.DataFrame(columns=amus, index=files)
+    for file in files:
+        for amu in amus:
+            intData[amu][file] = data[file][amu]['integral']
+            sigData[amu][file] = data[file][amu]['signal']
+
+    filename = appmodel.datafolder + ".xlsx"
+    savepath = os.path.join(APP_ROOT, "output", filename)
+
+    writer = pd.ExcelWriter(savepath, engine='xlsxwriter')
+    intData.to_excel(writer, sheet_name="Integral")
+    sigData.to_excel(writer, sheet_name="Signal")
+    writer.save()
 
 #Page routes
 @app.route("/", methods=["GET"])
@@ -33,8 +59,12 @@ def upload_page():
 @app.route("/explore", methods=["GET"])
 def explore_page():
     """ returns the exploratory analysis page """
-    path = appmodel.datafolder
-    filelist = os.listdir(path) if path else []
+    path = os.path.join(app.config["UPLOAD_FOLDER"], appmodel.datafolder)
+    if path:
+        print(path)
+        filelist = os.listdir(path)
+    else:
+        filelist = []
     return render_template("explore.html", filelist = filelist)
 
 @app.route("/analyze", methods=["GET"])
@@ -44,46 +74,96 @@ def analyze_page():
 
 
 #AJAX API Routes - Actions
-@app.route("/upload-folder", methods=["GET"])
-def upload():
+@app.route("/folder-list", methods=["GET"])
+def filelist():
     """ returns a list of files in the target folder. """
-    path = request.args["path"]
-    appmodel.datafolder = path
+    folder = request.args["folder"]
+    path = os.path.join(app.config["UPLOAD_FOLDER"], folder)
+    # appmodel.datafolder = path
     try:
         return Response(json.dumps(os.listdir(path)), mimetype="application/json")
     except FileNotFoundError:
         return Response("FileNotFoundError", status=404)
 
-@app.route("/transform", methods=["POST"])
-def transform():
-    """ take data from extrel and save in an easy-to-parse format. """
-    inpath = request.form["inpath"]
-    outpath = request.form["outpath"]
-    appmodel.transfolder = outpath
-    infiles = os.listdir(inpath)
-    #convert all the data and re-save using the ms
-    for infile in infiles:
-        print(inpath+"/"+infile)
-        exposure_data = data.read_extrel(inpath+"/"+infile)
-        outfile = infile.replace(".txt", ".msd")
-        exposure_data.to_csv(outpath+"/"+outfile, index_label="index")
-    return Response("saved", status=200)
+@app.route("/file-list", methods=["GET"])
+def folderlist():
+    """ returns a list of folders in the upload folder """
+    path = app.config["UPLOAD_FOLDER"]
+    return Response(json.dumps(os.listdir(path)), mimetype="application/json")
 
-@app.route("/run", methods=["POST"])
-def run_analysis():
-    outpath = request["outpath"]
-    #convert amu's to ints
-    amus = request["amus"]
-    for i in range(len(amulist)):
-        amus[i] = int(amus[i])
+@app.route("/set-folder", methods=["GET", "POST"])
+def activefolder():
+    """ gets and sets the active folder - for graphing and analysis """
+    if request.method == "GET":
+        return jsonify({'folder': appmodel.datafolder})
 
-    bgstart, bgend = int(request["bgrange"][0]), int(request["bgrange"][1]),
-    ibeam  = request["beamcurrent"]
-    texp   = request["exposuretime"]
+    if request.method == "POST":
+        print("setting folder = ", request.form["folder"])
+        folder = request.form["folder"]
+        appmodel.datafolder = folder
+        return Response("success", status=200)
 
-    results = analyze(inpath, bgstart, bgend, amus)
+@app.route("/upload", methods=["GET", "POST"])
+def upload_folder():
+    """ upload a folder and all its files. """
+    if request.method == "POST":
+        #get filename, folder name, and
+        file = request.files['file']
+        foldername = request.form['folder']
+        filename = request.form['name']
 
-    return jsonify(list)
+        #create a new folder if the requested folder doesnt exist
+        savepath = os.path.join(app.config['UPLOAD_FOLDER'], foldername)
+        if not os.path.exists(savepath):
+            os.mkdir(savepath)
+
+        #save the file to the requested folder
+        file.save(os.path.join(savepath, secure_filename(filename)))
+        return Response("saved", status=200)
+
+@app.route("/folder-delete", methods=["POST"])
+def delfolder():
+    """ deletes a requested folder from the data store. """
+    folder = request.form["folder"]
+    path = os.path.join(app.config["UPLOAD_FOLDER"], folder)
+    if not os.path.exists(path):
+        return Response("directory not found", status=404)
+
+    files = os.listdir(path)
+    for file in files:
+        os.remove(os.path.join(path, file))
+    os.rmdir(path)
+
+    return Response("success", status=200)
+
+@app.route("/run", methods=["GET", "POST"])
+def analysis():
+    if request.method == "GET":
+        return Response(json.dumps(appmodel.results), mimetype="application/json")
+
+    if request.method == "POST":
+        foldername = appmodel.datafolder
+
+        inpath  = os.path.join(app.config["UPLOAD_FOLDER"], foldername)
+        outpath = app.config["OUTPUT_FOLDER"]
+        outfile = os.path.join(outpath, foldername+".csv")
+
+        #convert amu's to ints
+        amus = appmodel.amus
+        for i in range(len(amus)):
+            amus[i] = int(amus[i])
+
+        print(request.form)
+        bgstart = int(request.form["bgstart"])
+        bgend = int(request.form["bgend"])
+        ibeam  = float(request.form["beamcurrent"])
+        texp   = float(request.form["exptime"])
+
+        results = data.analyze(inpath, bgstart, bgend, texp, ibeam, amus)
+        appmodel.results = results
+        save_output(results)
+
+        return Response(json.dumps(results), mimetype="application/json")
 
 #AJAX API routes - application state read/write
 @app.route("/data", methods=["GET"])
@@ -149,13 +229,13 @@ def analysis_settings():
 def intensities():
     """ given a file path and amu value, fetch the intensities for that amu """
     filename = request.args["file"]
-    amu  = int(request.args["amu"])
+    amu = int(request.args["amu"])
 
     if filename == appmodel.open_file_name:
         file = appmodel.open_file
 
     else:
-        path = appmodel.datafolder+"/"+filename
+        path = os.path.join(app.config["UPLOAD_FOLDER"], appmodel.datafolder, filename)
         file = data.read_extrel(path)
         appmodel.open_file = file
         appmodel.open_file_name = filename

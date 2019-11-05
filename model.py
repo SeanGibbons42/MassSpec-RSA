@@ -2,7 +2,6 @@ class AppModel():
     """ class AppModel is used to store global app context. """
     def __init__(self):
         self.datafolder = ""
-        self.transfolder = ""
         self.outputfolder = ""
         self.analysis_params = {
             "bg_start":0,
@@ -14,3 +13,5 @@ class AppModel():
         self.amus = []
         self.open_file_name = ""
         self.open_file = None
+
+        self.results = None

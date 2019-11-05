@@ -3,8 +3,11 @@
 {% block resources%}
   <link rel="stylesheet" href="{{ url_for('static', filename='upload/upload.css') }}">
   <script type="text/javascript">
-    upload_url = "{{ url_for('upload') }}"
-    transform_url = "{{ url_for('transform') }}"
+    file_url = "{{ url_for('filelist') }}"
+    folder_url = "{{ url_for('folderlist') }}"
+    upload_url = "{{ url_for('upload_folder') }}"
+    del_folder_url = "{{ url_for('delfolder') }}"
+    activeFolderUrl = "{{ url_for('activefolder') }}"
   </script>
   <script type="text/javascript" src="{{ url_for('static', filename='upload/upload.js') }}"></script>
 {% endblock %}
@@ -19,65 +22,67 @@
   <div class="row h-100">
     <div class="col-lg-7" id="fileselect-col">
       <div class="row">
-        <div class="col uicard">
+        <div class="col uicard" id="import-display">
           <div class="row">
-            <div class="col">
-              <h3>Data In</h3>
+            <div class="col-lg-9">
+              <h3>Import Folder</h3>
+            </div>
+            <div class="col-lg-3 d-flex align-items-center invis" id="prog-counter">
+              <div class="spinner-border ml-auto" id="upload-spinner" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
           </div>
           <div class="row fileselect">
             <div class="col-lg-12">
               <label for="inpath">Choose a File:</label> <br>
                 <div class="input-group">
-                  <input type="text" name="inpath" id="inpath-txt" class="form-control" value="">
+                  <input type="text" name="inpath" id="uploadpath-txt" class="form-control" value="">
                   <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Browse</button>
+                    <button class="btn btn-outline-secondary" type="button" id="upload-btn">Browse</button>
                   </div>
               </div>
-              <hr>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6" ></div>
-            <div class="col-lg-6 fileselect-btn-col">
-              <button type="button" id="selectfile-btn" class="btn btn-outline-secondary w-100">Load Contents</button>
+              <form id="upload-file">
+                <fieldset>
+                  <input type='file' name='file' multiple id="upload-file-dialog" style="visibility: hidden" webkitdirectory mozdirectory msdirectory odirectory directory>
+                </fieldset>
+              </form>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="uicard">
+        <div class="uicard" id="folder-display">
           <div class="row">
             <div class="col">
-              <h3>Data Out</h3>
+              <h3>Select Folder</h3>
+            </div>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <div class="folderlist" id="folderlist">
+                  <table class="table" style="width: 100%">
+                    <thead>
+                      <th style="width: 60%"> Folder </th>
+                      <th style="width: 40%"> Action </th>
+                    </thead>
+                    <tbody id="folderlist-body">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="row fileselect">
-            <div class="col-lg-12">
-              <label for="inpath">Choose a File:</label> <br>
-                <div class="input-group">
-                  <input type="text" name="transpath" id="transpath-txt" class="form-control" value="">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Browse</button>
-                  </div>
-              </div>
-              <hr>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6" ></div>
-            <div class="col-lg-6 fileselect-btn-col">
-              <button type="button" id="transpath-btn" class="btn btn-outline-secondary w-100">Save As Matrix</button>
-            </div>
-          </div>
 
         </div>
       </div>
     </div>
     <!-- right side column -->
     <div class="col-lg-5" style="display:flex">
-        <div class="uicard">
+        <div class="uicard" id="file-display">
           <div class="row">
             <div class="col">
               <h3>Files</h3>
@@ -86,7 +91,7 @@
           <div class="row">
             <div class="col">
               <div class="overflow-auto filelist" id="filelist">
-                
+
               </div>
             </div>
           </div>
