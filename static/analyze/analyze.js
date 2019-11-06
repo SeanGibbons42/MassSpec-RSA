@@ -30,7 +30,7 @@ function runAnalysis(){
   var bgend = $("#bgend").val()
   var beamcurrent = $("#beamcurrent").val();
   var exptime = $("#exptime").val();
-
+  showProgress();
   $.ajax(analysisURL, {
     type: "POST",
     data: {
@@ -40,9 +40,12 @@ function runAnalysis(){
       exptime: exptime,
     },
     success: function(data){
-      console.log(data)
+      hideProgress();
       makeTbody(amus, data);
     },
+    error: function(error){
+      hideProgress();
+    }
   });
 }
 
@@ -73,14 +76,16 @@ function makeThead(){
     method: "GET",
     success: function(data){
         amus = sortAMU(data);
-
+        colwidth = 1/(amus.length+1)*100;
         thead = $("#output-thead");
         thead.html("");
-        thead.append("<th>FileName</th>");
+        style=" style=\"width:"+colwidth+"%\""
+        thead.append("<th"+style+">FileName</th>");
         //add amu headers to the table
         amus.forEach(function(amu){
-          thead.append("<th>"+amu+"</th>");
+          thead.append("<th"+style+">"+amu+"</th>");
         });
+        console.log(thead.html())
     }
   });
 }

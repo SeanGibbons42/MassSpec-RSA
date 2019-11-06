@@ -26,7 +26,7 @@ function getAMU(){
 function renderAMU(){
   $("#amu-table").html("");
   amus.forEach(function(amu, index){
-    $("#amu-table").append("<tr> <td>"+amu+"</td> <td><button class=\"btn btn-outline-danger btn-sm amu-del-btn\" id=\"amubtn-"+amu+"\" amu=\""+amu+"\">Remove</button></td> </tr>");
+    $("#amu-table").append("<tr> <td>"+amu+"</td> <td><button class=\"btn btn-outline-danger btn-sm amu-del-btn\" id=\"amubtn-"+amu+"\" amu=\""+amu+"\"><i class=\"far fa-trash-alt\"></i></button></td> </tr>");
   });
   $(".amu-del-btn").click(function(){
     delAMU($(this).attr("amu"));

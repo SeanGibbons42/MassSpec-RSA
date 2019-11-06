@@ -1,7 +1,7 @@
 
 
 body{
-  background-color: #eeeeee;
+  background-color: #f9f9f9;
 }
 
 span{
@@ -9,13 +9,31 @@ span{
 }
 
 h2, h3{
+  text-align:center;
+  font-weight: bold;
   user-select: none;
+  vertical-align: middle;
 }
 
+/* table styles */
+.table th{
+  text-align: center;
+}
+
+.table td{
+  text-align: center;
+  vertical-align: middle;
+}
+
+table{
+  margin-top: 10px;
+}
+
+
 #page{
-  margin: 0 auto;
-  max-width: 1200px;
-  padding: 50px 0;
+  /* margin: 0 auto; */
+  /* max-width: 1200px; */
+  /* padding: 50px 0; */
 }
 
 #header{
@@ -24,6 +42,10 @@ h2, h3{
   border: 2px solid black;
   padding: 10px;
   box-shadow: 10px 10px 8px #888888;
+}
+
+#app-header{
+  text-align: left;
 }
 
 #sidebar{
@@ -48,10 +70,23 @@ h2, h3{
 .uicard{
   margin: 1.5vh 1.5vh;
   padding: 10px;
-  border: 2px solid black;
-  box-shadow: 10px 10px 8px #888888;
+  border-radius: 6px;
+  box-shadow: 0px 0px 2px #888888;
   width: 100%;
-  /* min-height: 25vh; */
+  background-color: #ffffff;
+}
+
+/* These blocks allow input-group labels to have equal size. */
+.input-append {
+    flex: 0 0 30%;
+    background-color: #ffffff;
+}
+.input-append .input-group-text {
+    width: 100%;
+    justify-content: center;
+}
+.input-group-text{
+  background-color: #ffffff;
 }
 
 .fileselect{
@@ -77,9 +112,17 @@ h2, h3{
   font-size: 1.2em;
   color: #e1e4e8;
   border-left: 4px solid #313540;
-  /* border-radius: 3px; */
 }
+
+.sidebar-menuitem a{
+  color: #888;
+}
+.sidebar-menuitem-active a{
+  color: #fff;
+}
+
 .sidebar-menuitem:hover{
+
 }
 
 .sidebar-menuitem-active{

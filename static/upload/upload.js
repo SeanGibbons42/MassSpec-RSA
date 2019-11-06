@@ -164,8 +164,8 @@ function recieveFolderList(data){
     selID = " id=\""+data[i]+"---sel\" "
     delID = " id=\""+data[i]+"---del\""
     rowID = " id=\""+ data[i] +"---row\""
-    selbut = "<button class=\"btn btn-outline-secondary btn-sm folder-btn\""+selID+"> Select </button>";
-    delbut = "<button class=\"btn btn-outline-danger btn-sm folder-btn\""+delID+"> Delete </button>"
+    selbut = "<button class=\"btn btn-outline-secondary btn-sm folder-btn\""+selID+"> <i class=\"far fa-hand-pointer\"></i> </button>";
+    delbut = "<button class=\"btn btn-outline-danger btn-sm folder-btn\""+delID+"> <i class=\"far fa-trash-alt\"></i> </button>"
     nline = "<tr class=\"folder-row\" "+rowID+"> <td> "+ data[i] +" </td> <td> "+selbut+delbut+" </td>  </tr>"
     foldertbl.append(nline);
   }
@@ -186,15 +186,15 @@ function recieveTransform(data){
   console.log(data)
 }
 
-function showProgress(nfiles){
-  // $("#progress").html("");
-  // $("#nfiles").html(nfiles);
-  $("#prog-counter").removeClass("invis");
-}
-
-function hideProgress(){
-  $("#prog-counter").addClass("invis");
-}
+// function showProgress(nfiles){
+//   // $("#progress").html("");
+//   // $("#nfiles").html(nfiles);
+//   $("#prog-counter").removeClass("invis");
+// }
+//
+// function hideProgress(){
+//   $("#prog-counter").addClass("invis");
+// }
 
 function fileProgressInc(nfiles){
   //increment the upload progress counter

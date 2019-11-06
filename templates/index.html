@@ -8,17 +8,22 @@
     <script type="text/javascript" src = "../static/dependencies/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src = "../static/dependencies/bootstrap.min.js"></script>
     <script type="text/javascript" src = "../static/index.js"></script>
+    <script src="https://kit.fontawesome.com/fa25710f97.js" crossorigin="anonymous"></script>
 
     {% block resources %} {% endblock %}
   </head>
-
   <body>
     <div class="container" id="page">
 
       <div class="row" id="header">
-        <div class="col">
+        <div class="col-lg-10">
           <div class="">
-            <h2 style="margin-left:15px">Mass Spec Data Central</h2>
+            <h2 id="app-header" style="margin-left:15px; font-size:3em;"><i style="font-weight:bold; vertical-align:middle;" class="far fa-chart-bar"></i> Mass Spec Data Studio</h2>
+          </div>
+        </div>
+        <div class="col-lg-2 d-flex align-items-center invis" id="prog-counter">
+          <div class="spinner-border ml-auto" id="upload-spinner" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
       </div>

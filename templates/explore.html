@@ -12,8 +12,14 @@
 
 {% block appcontent %}
   <div class="row">
-  <div class="col">
+    <div class="col-lg-1">
+      <h2><a href="{{ url_for('upload_page') }}"><i class="fas fa-arrow-circle-left"></i></a></h2>
+    </div>
+  <div class="col-lg-10">
     <h2> Explore Data </h2>
+  </div>
+  <div class="col-lg-1">
+    <h2><a href="{{ url_for('analyze_page') }}"><i class="fas fa-arrow-circle-right"></i></a></h2>
   </div>
   </div>
 
@@ -33,7 +39,6 @@
                 </div>
               </div>
             </div>
-
           </div>
       </div>
 
@@ -44,7 +49,7 @@
       <div class="uicard" id=graph-controls>
         <div class="row">
         <div class="col">
-          <h2> Graph Controls </h2>
+          <h3> AMU Select </h3>
         </div>
         </div>
         <hr>
@@ -88,7 +93,7 @@
             <div class="input-group amu-add">
               <input type="text" class="form-control" name="amu" id="amu-select">
               <div class="input-group-append">
-                <button type="button" class="btn btn-outline-secondary" id="amu-select-btn">+</button>
+                <button type="button" class="btn btn-outline-secondary" id="amu-select-btn"><i class="fas fa-plus"></i></button>
               </div>
             </div>
           </div>

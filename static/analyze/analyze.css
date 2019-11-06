@@ -12,25 +12,7 @@
    margin-top: 10px;
 }
 
-/* table styles */
-th{
-  font-size: 12px;
-  text-align: center;
-}
 
-td{
-  text-align: center;
-}
-
-
-/* These blocks allow input-group labels to have equal size. */
-.input-append {
-    flex: 0 0 30%;
-}
-.input-append .input-group-text {
-    width: 100%;
-    justify-content: center;
-}
 
 .analysis-row{
   margin: 15px 5px;
