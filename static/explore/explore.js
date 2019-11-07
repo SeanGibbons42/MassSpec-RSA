@@ -8,6 +8,8 @@ $(document).ready(function(){
   $("#explore-tab").addClass("sidebar-menuitem-active");
   $("#amu-select-btn").click(function(){addAMU();});
   $("#file-select").click(function(){changeFile();});
+
+  selectedFile = $("#file-select :selected").val();
   window.addEventListener("resize", displayGraph);
 });
 
@@ -91,7 +93,6 @@ function changeFile(){
   nFile = $("#file-select :selected").val();
   if(nFile !== selectedFile){
     selectedFile = nFile;
-    console.log(selectedFile);
     loadAMUData();
     displayGraph();
   }
@@ -134,49 +135,54 @@ function zipData(rawdata){
 
 function displayGraph(){
   parent_height = $("#graph").height();
-  paretn_width  = $("#graph").width();
+  parent_width  = $("#graph").width();
 
-  var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = paretn_width - margin.left - margin.right,
-    height = parent_height - margin.top - margin.bottom;
+  var margin = {top: 30, right: 30, bottom: 100, left: 80};
+  var width = parent_width - margin.left - margin.right;
+  var height = parent_height - margin.top - margin.bottom;
 
-$("#graph").html("")
-// append the svg object to the body of the page
-var svg = d3.select("#graph")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+  var labelheight = 20;
 
-colorlessData = zipData(amudata)
-var colorscale = d3.scaleOrdinal(d3.schemeCategory10)
-  .domain(d3.keys(colorlessData[0]).filter(function(k){return k !== "x";}));
+  $("#graph").html("")
+  // append the svg object to the body of the page. The SVG is the empty frame
+  // we will paint the chart onto.
+  var svg = d3.select("#graph")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
+  //define the color scale, which matches an AMU value to a color.
+  colorlessData = zipData(amudata)
+  var colorscale = d3.scaleOrdinal(d3.schemeCategory10)
+    .domain(d3.keys(colorlessData[0]).filter(function(k){return k !== "x";}));
 
-data = colorscale.domain().map(function(seriesname){
-  return {
-    name: seriesname,
-    values: colorlessData.map(function(d){
-      return {x: d.x, value: +d[seriesname]};
-    }),
-  };
-});
+  //re-organize the data into a form that works for d3.
+  data = colorscale.domain().map(function(seriesname){
+    return {
+      name: seriesname,
+      values: colorlessData.map(function(d){
+        return {x: d.x, value: +d[seriesname]};
+      }),
+    };
+  });
 
-  // Add X axis
+  // create X axis scale. A scale maps a data value to a position on the screen.
   var x = d3.scaleLinear()
     .domain([0, maxScan()])
     .range([ 0, width ]);
-
+  // add the X axis to the chart.
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
 
-  // Add Y axis
+  // create Y axis scale.
   var y = d3.scaleLinear()
     .domain([0, maxInten()])
     .range([ height, 0]);
+  // add the Y axis to the chart
   svg.append("g")
     .call(d3.axisLeft(y));
 
@@ -196,15 +202,79 @@ data = colorscale.domain().map(function(seriesname){
           .attr("r", 4)
           .attr("stroke", "white")
 
-  // svg.append('g')
-  //   .selectAll("dot1")
-  //   .data(data)
-  //   .enter()
-  //   .append("circle")
-  //     .attr("cx", function (d) { return x(d.x); } )
-  //     .attr("cy", function (d) { return y(d.y); } )
-  //     .attr("r", 3)
-  //     .style("fill", "#69b3a2")
+    //X Axis Title. We have to define the XY location precisely lol
+    xLabelXTransform = width/2;
+    xLabelYTransform = margin.top + height + 10;
+    svg.append("text")
+      .attr("transform", "translate("+xLabelXTransform+","+xLabelYTransform+")")
+      .style("text-anchor", "middle")
+      .style("font-weight", "bold")
+      .text("Scan #")
 
+    //Y Axis Title
+    yLabelXTransform = 0 - margin.left;
+    yLabelYTransform = 0 - height/2;
+    svg.append("text")
+      .attr("transform", "rotate(270)")
+      .attr("y", yLabelXTransform)
+      .attr("x", yLabelYTransform)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .style("font-weight", "bold")
+      .text("Counts")
+
+    //plot main title
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .style("text-decoration", "underline")
+        .text("Time Series: ");
+
+    /*                      Create the legend.                  */
+    var dataL = 0;
+    var offset = 50;
+    var ypos = margin.top + height+20;
+
+    //create containers for the legend entries
+    var legend = svg.selectAll("legend-entry")
+      .data(data)
+      .enter()
+        .append("g")
+          .attr("transform", function(d, i){
+            if(i===0){
+              dataL = offset;
+              return "translate(0,"+ ypos +")";
+            } else {
+              var newdataL = dataL;
+              dataL += offset;
+
+              str = "translate("+newdataL+" ,"+ ypos +")"
+
+              return str;
+            }
+          })
+    //add squares to each entry, with the color of the corresponding series.
+    legend.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", function(d,i){
+        return colorscale(d.name);
+      })
+
+    //now add the title [AMU Value to each entry]
+    legend.append('text')
+      .attr("x", 20)
+      .attr("y", 10)
+      .text(function(d, i){
+        return d.name;
+      })
+      .attr("class", "textselected")
+      .style("text-anchor", "start")
+      .style("font-size", 15)
 
 }

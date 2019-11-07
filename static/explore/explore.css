@@ -29,8 +29,10 @@ td{
 }
 
 #graph{
-  height:450px;
+  margin-top: 40px;
+  height:430px;
 }
+
 #graph-card{
   height: 550px;
 }
@@ -43,4 +45,9 @@ td{
 #analysis-settings{
   height: 550px;
   /* height: 18vh; */
+}
+
+#download-col{
+  text-align: right;
+  margin-right: 30px;
 }
