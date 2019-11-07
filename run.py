@@ -1,9 +1,14 @@
-import os
-import json
-import pandas as pd
 import data
 from model import AppModel
-from flask import Flask, Response, request, render_template, jsonify, send_from_directory
+
+import json
+import os
+import pandas as pd
+
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF, renderPM
+
+from flask import Flask, Response, request, render_template, jsonify, send_from_directory, send_file
 from werkzeug import secure_filename
 
 app = Flask(__name__)
@@ -164,6 +169,22 @@ def analysis():
         save_output(results)
 
         return Response(json.dumps(results), mimetype="application/json")
+
+@app.route("/svg2png", methods=["GET"])
+def save_svg():
+    """ receive the svg xml code for the graph, convert to PNG and send it back. """
+    svgtemppath = os.path.join(APP_ROOT, "output", "request.svg")
+    pngtemppath = os.path.join(APP_ROOT, "output", "request.png")
+
+    svg = request.args["svg"]
+
+    with open(svgtemppath, "w") as file:
+        file.write(svg)
+
+    drawing = svg2rlg(svgtemppath)
+    renderPM.drawToFile(drawing, pngtemppath, fmt="PNG")
+
+    return send_file(pngtemppath, attachment_filename="mass-spec.png")
 
 #AJAX API routes - application state read/write
 @app.route("/data", methods=["GET"])

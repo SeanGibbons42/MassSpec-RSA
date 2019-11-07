@@ -3,12 +3,15 @@
 {% block resources%}
 <link rel="stylesheet" href="../static/explore/explore.css">
 <script type="text/javascript">
-  amu_url = "{{url_for('update_amus')}}"
-  inten_url = "{{url_for('intensities')}}"
+  amu_url = "{{ url_for('update_amus') }}"
+  inten_url = "{{ url_for('intensities') }}"
+  svg_url = "{{ url_for('save_svg') }}"
 </script>
 <script type="text/javascript" src = "../static/dependencies/d3.min.js"></script>
+<script type="text/javascript" src = "../static/dependencies/saveSvgAsPng.js""></script>
 <script type="text/javascript" src="../static/explore/explore.js"></script>
 {% endblock %}
+
 
 {% block appcontent %}
   <div class="row">
@@ -36,7 +39,7 @@
             </div>
             <div class="col-lg-2">
               <div class="col" id="download-col">
-                <button class = "btn btn-outline-secondary"><i class="far fa-save"></i></button>
+                <button class = "btn btn-outline-secondary" id="save-btn"><i class="far fa-save"></i></button>
               </div>
             </div>
             </div>

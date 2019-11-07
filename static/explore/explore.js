@@ -8,7 +8,7 @@ $(document).ready(function(){
   $("#explore-tab").addClass("sidebar-menuitem-active");
   $("#amu-select-btn").click(function(){addAMU();});
   $("#file-select").click(function(){changeFile();});
-
+  $("#save-btn").click(function(){exportGraph()});
   selectedFile = $("#file-select :selected").val();
   window.addEventListener("resize", displayGraph);
 });
@@ -150,6 +150,9 @@ function displayGraph(){
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+      .style("background-color", 'white')
     .append("g")
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
@@ -185,7 +188,6 @@ function displayGraph(){
   // add the Y axis to the chart
   svg.append("g")
     .call(d3.axisLeft(y));
-
 
   // Add dots
   svg.selectAll("dots")
@@ -230,8 +232,7 @@ function displayGraph(){
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("font-weight", "bold")
-        .style("text-decoration", "underline")
-        .text("Time Series: ");
+        .text("Time Series: " + selectedFile);
 
     /*                      Create the legend.                  */
     var dataL = 0;
@@ -276,5 +277,9 @@ function displayGraph(){
       .attr("class", "textselected")
       .style("text-anchor", "start")
       .style("font-size", 15)
+}
 
+function exportGraph(){
+  svg = $("#graph > svg").get(0)
+  saveSvgAsPng(svg, selectedFile+".png");
 }
