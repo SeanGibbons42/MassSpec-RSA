@@ -30,50 +30,76 @@ table{
 }
 
 
-#page{
-  /* margin: 0 auto; */
-  /* max-width: 1200px; */
-  /* padding: 50px 0; */
-}
-
 #header{
   margin: 0px;
+  margin-left: -30px;
+  margin-right: -30px;
   background: #FFFFFF;
-  border: 2px solid black;
+  border-bottom: 2px solid #aaa;
   padding: 10px;
-  box-shadow: 10px 10px 8px #888888;
+  /* box-shadow: 10px 10px 8px #888888; */
+}
+
+#body{
+  margin-left: -30px;
+}
+
+#page-header{
+
 }
 
 #app-header{
   text-align: left;
+  font-family: 'Lato', sans-serif;
+  margin-left:15px;
+  font-size:3em;
 }
 
 #sidebar{
   padding: 10px;
-  margin: 0px;
+  padding-left: 20px;
   padding-top: 30px;
-  border: 2px solid black;
-  background: #313540;
-  height: 700px;
+  background: #f9f9f9;
+  min-height: 100vh;
+  height: 100%;
 }
 
 #content{
   margin-top: 15px;
+  margin-bottom: 15px;
   max-height: 80vh;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-#filelist{
+/* #filelist{
   height: 45vh;
   overflow: auto;
-}
+} */
 
 .uicard{
-  margin: 1.5vh 1.5vh;
+  /* margin: 1.5vh 1.5vh; */
+  box-sizing: border-box;
+  /* margin: 10px; */
   padding: 10px;
   border-radius: 6px;
   box-shadow: 0px 0px 2px #888888;
   width: 100%;
   background-color: #ffffff;
+}
+
+.uicard-box{
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+}
+
+.uicard-titlerow{
+  height: 10%;
+}
+
+.uicard-tablerow{
+  height: 90%
 }
 
 /* These blocks allow input-group labels to have equal size. */
@@ -105,24 +131,28 @@ table{
 }
 
 .sidebar-menuitem{
-  margin-bottom: 10px;
-
+  padding-bottom: 20px;
+  padding-top: 20px;
   text-align: center;
   font-weight: bold;
   font-size: 1.2em;
   color: #e1e4e8;
-  border-left: 4px solid #313540;
+  /* border-top: 1px solid gray; */
+  /* border-bottom: 1px solid gray; */
+  /* border-left: 4px solid #313540; */
 }
 
 .sidebar-menuitem a{
   color: #888;
+  margin-left: 10px;
+  text-decoration: none;
 }
 .sidebar-menuitem-active a{
-  color: #fff;
+  color: #111;
 }
 
 .sidebar-menuitem:hover{
-
+background-color: #f1f1f1;
 }
 
 .sidebar-menuitem-active{

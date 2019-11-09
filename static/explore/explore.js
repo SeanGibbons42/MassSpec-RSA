@@ -6,6 +6,7 @@ var selectedFile = "";
 $(document).ready(function(){
   getAMU();
   $("#explore-tab").addClass("sidebar-menuitem-active");
+
   $("#amu-select-btn").click(function(){addAMU();});
   $("#file-select").click(function(){changeFile();});
   $("#save-btn").click(function(){exportGraph()});
@@ -281,5 +282,5 @@ function displayGraph(){
 
 function exportGraph(){
   svg = $("#graph > svg").get(0)
-  saveSvgAsPng(svg, selectedFile+".png");
+  saveSvgAsPng(svg, selectedFile+".png", {scale:4});
 }

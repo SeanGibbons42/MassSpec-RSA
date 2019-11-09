@@ -75,9 +75,10 @@ function makeThead(){
   $.ajax(amu_url, {
     method: "GET",
     success: function(data){
-        amus = sortAMU(data);
-        colwidth = 1/(amus.length+1)*100;
-        thead = $("#output-thead");
+        var amus = sortAMU(data);
+        var colwidth = 1/(amus.length+1)*100;
+        // var minwidth = 100;
+        var thead = $("#output-thead");
         thead.html("");
         style=" style=\"width:"+colwidth+"%\""
         thead.append("<th"+style+">FileName</th>");
@@ -102,7 +103,9 @@ function makeTbody(amus, data){
     nline = "<tr>"
     nline = nline + "<td>"+ file +"</td>"
     amus.forEach(function(amu){
-      nline = nline + "<td>" + data[file][amu][qty] + "</td>"
+      ndata = data[file][amu][qty]
+      ndata = expo(ndata, 3)
+      nline = nline + "<td>" + ndata + "</td>"
     });
     nline = nline + "</tr>"
     tbody.append(nline)
@@ -115,4 +118,8 @@ function sortAMU(amudata){
     return parseInt(amuStr)
   });
   return amus.sort();
+}
+
+function expo(x, f) {
+  return Number.parseFloat(x).toExponential(f);
 }

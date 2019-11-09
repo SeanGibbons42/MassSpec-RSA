@@ -30,7 +30,7 @@
     <div class="col-lg-8">
       <div class="row">
           <div class="col uicard" id="graph-card">
-            <div class="row h-30">
+            <div class="row uicard-titlerow">
             <div class="col-lg-2">
 
             </div>
@@ -43,7 +43,7 @@
               </div>
             </div>
             </div>
-            <div class="row">
+            <div class="row" id="graph-row">
               <div class="col">
                 <div class="" id="graph">
 
@@ -61,14 +61,14 @@
 
     <div class="col-lg-4" style="display:flex">
       <div class="uicard" id=graph-controls>
-        <div class="row">
+        <div class="row uicard-titlerow">
         <div class="col">
           <h3> AMU Select </h3>
         </div>
         </div>
         <hr>
 
-        <div class="row">
+        <div class="row" id="fileselect-row">
           <div class="col" style="margin: 0px 10px;">
             <select class="custom-select" name="file-select" id='file-select'>
               {% for filename in filelist %}
@@ -78,7 +78,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" id="amu-range-rows">
           <div class="col amu-range">
             <p>Min Amu - 0</p>
           </div>
@@ -86,7 +86,7 @@
             <p>Max Amu - 50</p>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id="amu-menu-row">
           <div class="col" >
             <div class="" id="amu-menu">
               <table class="table">
@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" id="amu-add-row">
           <div class="col">
             <div class="input-group amu-add">
               <input type="text" class="form-control" name="amu" id="amu-select">

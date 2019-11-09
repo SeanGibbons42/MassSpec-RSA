@@ -6,7 +6,7 @@
 }
 
 .amu-add{
-  margin-top: 0.8em
+  margin-top: 0.8em;
 }
 
 th{
@@ -22,32 +22,56 @@ td{
 }
 
 #amu-menu{
-  height: 300px;
-  border: 1px solid black;
+  height: 100%;
+  border: 1px solid #777;
   border-radius: 4px;
   overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px;
 }
 
 #graph{
-  margin-top: 40px;
-  height:430px;
+  height:100%;
 }
 
 #graph-card{
-  height: 550px;
+  /* height: 550px; */
+  height: 40vw;
+}
+
+#graph-row{
+  height:90%;
 }
 
 #graph-controls{
-  height: 550px;
-  /* height: 68vh; */
+  height: 100%;
 }
 
 #analysis-settings{
   height: 550px;
-  /* height: 18vh; */
 }
 
 #download-col{
   text-align: right;
   margin-right: 30px;
+}
+
+.uicard-titlerow{
+  height: 7%
+}
+
+#fileselect-row{
+  height: 7%;
+}
+#amu-range-row{
+  height: 5%;
+}
+#amu-menu-row{
+  height:65%;
+}
+#amu-select-row{
+  height:10%;
+}
+hr{
+  margin-top: 0px;
 }

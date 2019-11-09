@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+  // $(".sidebar-menuitem").click
 });
 
 function showProgress(nfiles){

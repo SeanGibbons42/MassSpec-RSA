@@ -150,7 +150,8 @@ function recieveFileList(data){
   flist = $("#filelist");
   flist.empty();
   for(i=0; i<data.length; i++){
-    tag = "<p>" + data[i] + "</p>"
+    datacell = "<td id=\"filecell\">" + data[i] + "</td>"
+    tag = "<tr>" + datacell + "</tr>";
     flist.append(tag);
   }
 }
