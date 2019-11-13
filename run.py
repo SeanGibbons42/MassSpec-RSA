@@ -8,9 +8,6 @@ import pandas as pd
 import webbrowser
 from threading import Timer
 
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPDF, renderPM
-
 from flask import Flask, Response, request, render_template, jsonify, send_from_directory, send_file
 from werkzeug import secure_filename
 

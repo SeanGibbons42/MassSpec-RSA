@@ -4,10 +4,10 @@ cd ..
 mkdir uploads
 mkdir output
 
-python34 -m venv
+python -m venv
 CALL venv\Scripts\activate.bat
 
-python34 -m pip install --upgrade pip
-python34 -m pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 
 :END
