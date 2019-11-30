@@ -77,7 +77,7 @@ function makeThead(){
     success: function(data){
         var amus = sortAMU(data);
         var colwidth = 1/(amus.length+1)*100;
-        // var minwidth = 100;
+
         var thead = $("#output-thead");
         thead.html("");
         style=" style=\"width:"+colwidth+"%\""
@@ -96,7 +96,6 @@ function makeTbody(amus, data){
   tbody.html("");
 
   qty = $("#qty-select :selected").val();
-  console.log(qty);
   amus = sortAMU(amus);
 
   for(file in data){

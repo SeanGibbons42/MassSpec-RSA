@@ -11,7 +11,7 @@ $(document).ready(function(){
   $("#file-select").click(function(){changeFile();});
   $("#save-btn").click(function(){exportGraph()});
   selectedFile = $("#file-select :selected").val();
-  window.addEventListener("resize", displayGraph);
+  window.addEventListener("resize", displayTimeSeries);
 });
 
 function getAMU(){
@@ -47,7 +47,7 @@ function loadAMUData(){
       success: function(data){
         amudata["x"] = data.scans;
         amudata[amu] = data.amus;
-        displayGraph();
+        displayTimeSeries();
       },
       error: function(error){},
     });
@@ -84,7 +84,7 @@ function delAMU(amu){
     success: function(data){
       amus.splice(amus.indexOf(amu),1); renderAMU();
       delete amudata[amu]
-      displayGraph()
+      displayTimeSeries()
     },
     error: function(error){},
   });
@@ -95,7 +95,7 @@ function changeFile(){
   if(nFile !== selectedFile){
     selectedFile = nFile;
     loadAMUData();
-    displayGraph();
+    displayTimeSeries();
   }
 }
 
@@ -134,7 +134,7 @@ function zipData(rawdata){
   return outdata;
 }
 
-function displayGraph(){
+function displayTimeSeries(){
   parent_height = $("#graph").height();
   parent_width  = $("#graph").width();
 
@@ -278,6 +278,10 @@ function displayGraph(){
       .attr("class", "textselected")
       .style("text-anchor", "start")
       .style("font-size", 15)
+}
+
+function displayMassSpec(){
+  
 }
 
 function exportGraph(){

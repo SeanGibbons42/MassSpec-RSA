@@ -67,11 +67,11 @@ def analyze(dir, bgstart, bgend, exptime, beamcurrent, amulist):
             integral = integrate(amuData)
             nelectron = (beamcurrent*exptime)/1.602e-19
             signal = integral/nelectron
+            average = integral/len(amuData)
 
-            #signal here ->
-            dataByAmu[amu] = {"integral": integral, "signal": signal}
+            #data save data for this amu
+            dataByAmu[amu] = {"integral": integral, "signal": signal, "average": average}
         dataByFile[file] = dataByAmu
-    print(dataByFile)
     return dataByFile
 
 def load_all(dir):
@@ -96,10 +96,6 @@ def bg_subtract(inten, bg_start, bg_end):
     """ Takes in a Series of intensities, and the start/end of the background range.
         Subtracts background signal, and returns a series of background-subtracted intensities"""
     bg_range = inten[bg_start:bg_end+1]
-    # print("###########################")
-    # print(bg_range)
-    # print(type(bg_range))
-    # bg_range = pd.Series(bg_range)
     bg = bg_range.mean()
     return inten - bg
 
