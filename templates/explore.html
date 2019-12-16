@@ -4,42 +4,80 @@
 <link rel="stylesheet" href="../static/explore/explore.css">
 <script type="text/javascript">
   amu_url = "{{ url_for('update_amus') }}"
-  inten_url = "{{ url_for('intensities') }}"
+  scan_url = "{{ url_for('scan_intensities') }}"
+  inten_amu_url = "{{ url_for('intensities') }}"
+  inten_scan_url = "{{ url_for('scan_intensities') }}"
   svg_url = "{{ url_for('save_svg') }}"
 </script>
 <script type="text/javascript" src = "../static/dependencies/d3.min.js"></script>
 <script type="text/javascript" src = "../static/dependencies/saveSvgAsPng.js""></script>
+<script src="https://unpkg.com/popper.js@1"></script>
+<script src="https://unpkg.com/tippy.js@5"></script>
 <script type="text/javascript" src="../static/explore/explore.js"></script>
 {% endblock %}
 
 
 {% block appcontent %}
-  <div class="row">
-    <div class="col-lg-1">
-      <h2><a href="{{ url_for('upload_page') }}"><i class="fas fa-arrow-circle-left"></i></a></h2>
+  <!-- Popover Content -->
+  <div id="popover-content" class="d-none">
+    <div class="form-horizontal">
+      <div class="row popover-gutter">
+        <div class="col-6 slider-col">
+          <input type="range" class="form-control-range" id="scan-select-range" min="0" max="100" value="0">
+        </div>
+        <div class="col-3 ">
+          <input type="text" class="form-control" id="scan-select-text" value="0">
+        </div>
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-primary" id="graph-refresh"><i class="fas fa-sync-alt"></i></button>
+        </div>
+      </div>
     </div>
+    </div>
+
+  <!-- Page Header -->
+  <div class="row">
+  <!-- Back arrow placeholder -->
+  <div class="col-lg-1">
+    <h2><a href="{{ url_for('upload_page') }}"><i class="fas fa-arrow-circle-left"></i></a></h2>
+  </div>
+  <!-- page title -->
   <div class="col-lg-10">
     <h2> Explore Data </h2>
   </div>
+  <!-- forward arrow -->
   <div class="col-lg-1">
     <h2><a href="{{ url_for('analyze_page') }}"><i class="fas fa-arrow-circle-right"></i></a></h2>
   </div>
   </div>
 
+  <!-- page content -->
   <div class="row">
+    <!-- graph column -->
     <div class="col-lg-8">
       <div class="row">
+        <!-- Graph Container -->
           <div class="col uicard" id="graph-card">
             <div class="row uicard-titlerow">
-            <div class="col-lg-2">
+            <!-- Placeholder col [Centers title] -->
+            <div class="col-lg-4">
 
             </div>
-            <div class="col-lg-8">
-              <h3> Graph </h3>
+            <!-- Graph Options -->
+            <div class="col-lg-4">
+              <h3> Vizualization </h3>
             </div>
-            <div class="col-lg-2">
-              <div class="col" id="download-col">
-                <button class = "btn btn-outline-secondary" id="save-btn"><i class="far fa-save"></i></button>
+            <!-- Graph Menu -->
+            <div class="col-lg-4">
+              <div class="col" id="graph-menu">
+                <select class="custom-select" id="graph-select">
+                  <option value="time">Time Series</option>
+                  <option value="mass">Mass Spec</option>
+                </select>
+                <button class = "btn btn-outline-secondary graph-option" id="settings-btn" data-toggle="popover">
+                  <i class="fas fa-cog"></i>
+                </button>
+                <button class = "btn btn-outline-secondary graph-option" id="save-btn"><i class="far fa-save"></i></button>
               </div>
             </div>
             </div>
@@ -50,15 +88,10 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="row">
-
-            </div> -->
           </div>
       </div>
-
-
     </div>
-
+    <!-- AMU Menu Column -->
     <div class="col-lg-4" style="display:flex">
       <div class="uicard" id=graph-controls>
         <div class="row uicard-titlerow">

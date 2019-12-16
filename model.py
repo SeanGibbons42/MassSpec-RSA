@@ -9,9 +9,13 @@ class AppModel():
             "beam_current":0.1,
             "exposure_time":2,
         }
-
+        #list of currently selected AMU's
         self.amus = []
+        #scan # range. format is [first, last]
+        self.scanrange = []
+        #name of currently open file
         self.open_file_name = ""
+        #contents of currently opened file
         self.open_file = None
-
+        #Results from last analysis run
         self.results = None

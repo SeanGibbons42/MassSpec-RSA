@@ -51,9 +51,12 @@ td{
   height: 550px;
 }
 
-#download-col{
-  text-align: right;
-  margin-right: 30px;
+#graph-menu{
+  display: flex;
+  justify-content: right;
+}
+.graph-option{
+  margin: auto 10px;
 }
 
 .uicard-titlerow{
@@ -74,4 +77,23 @@ td{
 }
 hr{
   margin-top: 0px;
+}
+
+.slider-col{
+  display: flex;
+  align-items: center;
+}
+
+.popover-gutter {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.popover-gutter > [class*='col-']{
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.popover{
+    max-width: 300px; /* Max Width of the popover (depending on the container!) */
 }

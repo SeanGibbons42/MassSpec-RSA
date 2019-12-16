@@ -196,7 +196,7 @@ def save_svg():
 #AJAX API routes - application state read/write
 @app.route("/data", methods=["GET"])
 def get_inten_data():
-    """ Handles request for amu data [primarily for graphing] """
+    """ Handles request for amu data [primarily for graphing], for a given file """
     #get file information
     folder = appmodel.transfolder if appmodel.transfolder else appmodel.infolder
     file = request["filename"]
@@ -238,6 +238,11 @@ def update_amus():
 
         return Response("success", status=200)
 
+@app.route("/scan", methods = ["GET"])
+def get_scan_range():
+    fname = request.args["filename"]
+
+
 @app.route("/settings", methods=["GET", "POST"])
 def analysis_settings():
     if request.method=="GET":
@@ -259,6 +264,24 @@ def intensities():
     filename = request.args["file"]
     amu = int(request.args["amu"])
 
+    #if the file is the same, all clear
+    if filename == appmodel.open_file_name:
+        file = appmodel.open_file
+
+    #if not load the requested file and save it to application state
+    else:
+        path = os.path.join(app.config["UPLOAD_FOLDER"], appmodel.datafolder, filename)
+        file = data.read_extrel(path)
+        appmodel.open_file = file
+        appmodel.open_file_name = filename
+
+    return jsonify({"amus":file.loc[amu].tolist(), "scans":file.columns.tolist()})
+
+@app.route("/scan-inten", methods=["GET"])
+def scan_intensities():
+    """ Given a scan #, return intesity vs AMU """
+    filename = request.args["file"]
+    scan = int(request.args["scan"])
     if filename == appmodel.open_file_name:
         file = appmodel.open_file
 
@@ -268,7 +291,8 @@ def intensities():
         appmodel.open_file = file
         appmodel.open_file_name = filename
 
-    return jsonify({"amus":file.loc[amu].tolist(), "scans":file.columns.tolist()})
+    return jsonify({"intensities": file[scan].tolist(), "amulist": file.index.tolist()})
+
 
 
 @app.route('/favicon.ico')
