@@ -5,6 +5,7 @@ scandata = {};
 selectedFile = "";
 selectedScan = 0;
 
+
 $(document).ready(function(){
   getSelectedAMU();
   $("#explore-tab").addClass("sidebar-menuitem-active");
@@ -23,31 +24,58 @@ $(document).ready(function(){
 });
 
 function activatePopovers(){
-  $("#settings-btn").popover({
-    container: 'body',
-    title: 'Select Scan',
-    html: true,
-    placement: 'bottom',
-    sanitize: false,
-    content: function(){
-      return $("#popover-content").html();
+  template = $("#popover");
+  template = template.get(0)
+
+  tippy("#settings-btn", {
+    theme: "light",
+    placement: "bottom",
+    trigger: "click",
+    interactive: true,
+    content: template,
+    onMount(instance, event){
+      var file = $("#file-select :selected").val();
+      console.log("Running: " + file);
+      $.ajax(scan_range_url, {
+        data: {file: file},
+        method: "GET",
+        success: function(data){setupPopoverMenu(instance, data.min, data.max)}
+      })
+      setupPopoverMenu(instance);
     }
-  });
-  setupPopoverMenu();
+  })
 
 }
 
-function setupPopoverMenu(){
+function setupPopoverMenu(instance, minScan, maxScan){
   //Add event listeners to items in the graph options popover.
-  $(document.body).on("click", "#graph-refresh", function(){
+  var slider = $("#scan-select-range");
+  slider.attr("min", minScan);
+  slider.attr("max", maxScan);
+  slider.val(selectedScan);
+
+  var text = $("#scan-select-text")
+  text.val(selectedScan);
+
+  var btn = $("#graph-refresh")
+
+  slider.on("input change", function(){
+    selectedScan = slider.val()
+    text.val( slider.val() );
   })
-  $(document.body).on("input change", "#scan-select-range", function(){
-    var scan_text = $(this).parent().parent().find("#scan-select-text");
-    scan_text.val($(this).val())
+
+  slider.on("change", function(){
+    loadScanData();
+  });
+
+  text.on("change", function(){
+    selectedScan = text.val()
+    range.val( slider.val() );
   })
-  $(document.body).on("change", "#scan-select-text", function(){
-    var scan_range = $(this).parent().parent().find("#scan-select-range");
-    scan_range.val($(this).val())
+
+  btn.click(function(){
+    loadScanData();
+    instance.hide();
   })
 }
 
@@ -103,12 +131,12 @@ function loadAMUData(){
   });
 }
 
-function loadScanData(scan){
+function loadScanData(){
   var file = $("#file-select :selected").val();
-  var scan = "1";
+  var scan = selectedScan;
   $.ajax(inten_scan_url, {
     method: "GET",
-    data: {file:file, scan: "1"},
+    data: {file:file, scan: scan},
     success: function(data){
       scandata["x"] = data.amulist
       scandata["inten"] = data.intensities
@@ -363,7 +391,7 @@ function displayMassSpec(){
   var parent_width  = $("#graph").width();
 
   //graph dimensions
-  var margin = {top: 30, right: 30, bottom: 100, left: 100};
+  var margin = {top: 40, right: 30, bottom: 60, left: 100};
   var width = parent_width - margin.left - margin.right;
   var height = parent_height - margin.top - margin.bottom;
   var labelheight = 20;
@@ -435,6 +463,7 @@ function displayMassSpec(){
     .style("font-weight", "bold")
     .text("AMU");
 
+  //Y Label
   var yLabelXTransform = 0 - margin.left;
   var yLabelYTransform = 0 - height/2;
   svg.append("text")
@@ -448,9 +477,37 @@ function displayMassSpec(){
     .style("font-weight", "bold")
     .text("Counts");
 
+    //Scan Label
+    svg.append("text")
+      .attr("x", 15)
+      .attr("y", margin.top + height + 20)
+      .attr("text-anchor", "left")
+      .style("font-family", "Lato")
+      .style("font-size", "1em")
+      .style("font-weight", "bold")
+      .text("Scan #: " + selectedScan);
+
+    //plot main title
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-family", "Lato")
+        .style("font-size", "1.1em")
+        .style("font-weight", "bold")
+        .text("Mass Spec: " + selectedFile );
+
 }
 
 function getXRange(amulist, interval){
+  /* Rules for Range
+    1. If the min is divisible by the interval, move the start of the range back 1
+    2. If not, move the start back to the nearest multiple of the interval.
+    3. Same for the max, but the end point is increased.
+    These work to:
+    a) prevent the first bar from ending up on the y axis
+    b) ensure nice round numbers for axis labels.
+   */
   min = amulist[0];
   if(min % interval === 0){ min = min - 1; }
   else { min = min - min % interval; }
@@ -462,11 +519,15 @@ function getXRange(amulist, interval){
 }
 
 function getBarSize(n, chartWidth, maxBarWidth){
+  /* calculates bar width, which is (chart width)/(n scans).
+     if the bar width is greater than the max width, return max width
+  */
   barWidth = Math.floor(chartWidth / n);
   return maxBarWidth < barWidth ? maxBarWidth : barWidth;
 }
 
 function exportGraph(){
+  /* download graph as PNG image. */
   svg = $("#graph > svg").get(0)
   saveSvgAsPng(svg, selectedFile+".png", {scale:4});
 }

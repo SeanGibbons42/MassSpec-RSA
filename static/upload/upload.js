@@ -94,7 +94,6 @@ function requestFolderList(){
   $.ajax(folder_url,{
     type: "GET",
     success: function(data){
-      console.log(data);
       recieveFolderList(data);
     },
   });

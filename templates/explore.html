@@ -2,9 +2,12 @@
 
 {% block resources%}
 <link rel="stylesheet" href="../static/explore/explore.css">
+<link rel="stylesheet" href="https://unpkg.com/tippy.js@5.1.2/themes/light.css" />
+
 <script type="text/javascript">
   amu_url = "{{ url_for('update_amus') }}"
   scan_url = "{{ url_for('scan_intensities') }}"
+  scan_range_url = "{{ url_for('scan_range') }}"
   inten_amu_url = "{{ url_for('intensities') }}"
   inten_scan_url = "{{ url_for('scan_intensities') }}"
   svg_url = "{{ url_for('save_svg') }}"
@@ -14,13 +17,14 @@
 <script src="https://unpkg.com/popper.js@1"></script>
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script type="text/javascript" src="../static/explore/explore.js"></script>
+
 {% endblock %}
 
 
 {% block appcontent %}
   <!-- Popover Content -->
   <div id="popover-content" class="d-none">
-    <div class="form-horizontal">
+    <div class="form-horizontal" id="popover">
       <div class="row popover-gutter">
         <div class="col-6 slider-col">
           <input type="range" class="form-control-range" id="scan-select-range" min="0" max="100" value="0">
@@ -61,24 +65,21 @@
             <div class="row uicard-titlerow">
             <!-- Placeholder col [Centers title] -->
             <div class="col-lg-4">
-
+              <select class="custom-select" id="graph-select">
+                <option value="time">Time Series</option>
+                <option value="mass">Mass Spec</option>
+              </select>
             </div>
             <!-- Graph Options -->
             <div class="col-lg-4">
-              <h3> Vizualization </h3>
+              <h3> Visualization </h3>
             </div>
             <!-- Graph Menu -->
-            <div class="col-lg-4">
-              <div class="col" id="graph-menu">
-                <select class="custom-select" id="graph-select">
-                  <option value="time">Time Series</option>
-                  <option value="mass">Mass Spec</option>
-                </select>
+            <div class="col-lg-4 text-right">
                 <button class = "btn btn-outline-secondary graph-option" id="settings-btn" data-toggle="popover">
                   <i class="fas fa-cog"></i>
                 </button>
                 <button class = "btn btn-outline-secondary graph-option" id="save-btn"><i class="far fa-save"></i></button>
-              </div>
             </div>
             </div>
             <div class="row" id="graph-row">

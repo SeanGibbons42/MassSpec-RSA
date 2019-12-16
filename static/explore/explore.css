@@ -97,3 +97,7 @@ hr{
 .popover{
     max-width: 300px; /* Max Width of the popover (depending on the container!) */
 }
+
+#popover{
+  margin: 5px;
+}
