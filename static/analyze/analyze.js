@@ -82,6 +82,7 @@ function makeThead(){
     success: function(data){
         var amus = sortAMU(data);
         var colwidth = 1/(amus.length+1)*100;
+        
 
         var thead = $("#output-thead");
         thead.html("");
