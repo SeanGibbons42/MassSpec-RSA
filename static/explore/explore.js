@@ -35,7 +35,6 @@ function activatePopovers(){
     content: template,
     onMount(instance, event){
       var file = $("#file-select :selected").val();
-      console.log("Running: " + file);
       $.ajax(scan_range_url, {
         data: {file: file},
         method: "GET",

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 
+from natsort import natsorted
 
 def read_extrel(fname):
     """ Reads scan data from a csv file. Returns a pandas dataframe where:
@@ -52,9 +53,9 @@ def read_extrel(fname):
 def read_msd(path):
     return pd.read_csv(path, index_col="index")
 
-def analyze(dir, bgstart, bgend, exptime, beamcurrent, amulist):
+def analyze(dir, bgstart, bgend, avgstart, avgend, exptime, beamcurrent, amulist):
     exposures = load_all(dir)
-    filenames = os.listdir(dir)
+    filenames = natsorted(os.listdir(dir))
 
     dataByFile = {}
     for file in filenames:
@@ -64,15 +65,19 @@ def analyze(dir, bgstart, bgend, exptime, beamcurrent, amulist):
         for amu in amulist:
             amuData = exposureData.loc[amu]
             amuData = bg_subtract(amuData, bgstart, bgend)
+
             integral = integrate(amuData)
+            csum = np.cumsum(amuData[avgstart:avgend+1])
+            #signal is integral/n electrons
             nelectron = (beamcurrent*exptime)/1.602e-19
             signal = integral/nelectron
-            average = integral/len(amuData)
+            #return the average of the cumulative sum
+            average = csum.mean()
 
             #data save data for this amu
             dataByAmu[amu] = {"integral": integral, "signal": signal, "average": average}
         dataByFile[file] = dataByAmu
-    return dataByFile
+    return dataByFile, filenames
 
 def load_all(dir):
     """returns a list of data extracted from all exposure files. One element=one exposure"""

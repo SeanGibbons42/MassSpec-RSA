@@ -7,7 +7,6 @@ $(document).ready(function(){
   $("#analysis-file-dialog").change(function(){selectFile();});
 
   $("#analysis-btn").click(function(){
-    console.log("Button Pressed");
     runAnalysis();
   });
 
@@ -28,6 +27,8 @@ function selectFile(){
 function runAnalysis(){
   var bgstart = $("#bgstart").val()
   var bgend = $("#bgend").val()
+  var avgstart = $("#avgstart").val()
+  var avgend = $("#avgend").val()
   var beamcurrent = $("#beamcurrent").val();
   var exptime = $("#exptime").val();
   showProgress();
@@ -36,6 +37,8 @@ function runAnalysis(){
     data: {
       bgstart: bgstart,
       bgend: bgend,
+      avgstart: avgstart,
+      avgend: avgend,
       beamcurrent: beamcurrent,
       exptime: exptime,
     },
@@ -55,6 +58,8 @@ function getSettings(){
     success: function(data){
       $("#bgstart").val(data.bg_start);
       $("#bgend").val(data.bg_end);
+      $("#avgstart").val(data.avg_start);
+      $("#avgend").val(data.avg_end);
       $("#exptime").val(data.exposure_time);
       $("#beamcurrent").val(data.beam_current);
     },
@@ -86,7 +91,6 @@ function makeThead(){
         amus.forEach(function(amu){
           thead.append("<th"+style+">"+amu+"</th>");
         });
-        console.log(thead.html())
     }
   });
 }
@@ -98,17 +102,21 @@ function makeTbody(amus, data){
   qty = $("#qty-select :selected").val();
   amus = sortAMU(amus);
 
-  for(file in data){
+  files = data.files
+  data = data.data
+
+  files.forEach(function(file){
     nline = "<tr>"
     nline = nline + "<td>"+ file +"</td>"
     amus.forEach(function(amu){
+      console.log(file +" "+amu+" "+qty)
       ndata = data[file][amu][qty]
       ndata = expo(ndata, 3)
       nline = nline + "<td>" + ndata + "</td>"
     });
     nline = nline + "</tr>"
     tbody.append(nline)
-  }
+  })
 }
 
 function sortAMU(amudata){

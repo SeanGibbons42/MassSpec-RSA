@@ -5,6 +5,8 @@ import json
 import os
 import pandas as pd
 
+from natsort import natsorted
+
 import webbrowser
 from threading import Timer
 
@@ -74,8 +76,7 @@ def explore_page():
     """ returns the exploratory analysis page """
     path = os.path.join(app.config["UPLOAD_FOLDER"], appmodel.datafolder)
     if path:
-        print(path)
-        filelist = os.listdir(path)
+        filelist = natsorted(os.listdir(path))
     else:
         filelist = []
     return render_template("explore.html", filelist = filelist)
@@ -92,9 +93,11 @@ def filelist():
     """ returns a list of files in the target folder. """
     folder = request.args["folder"]
     path = os.path.join(app.config["UPLOAD_FOLDER"], folder)
-    # appmodel.datafolder = path
+
     try:
-        return Response(json.dumps(os.listdir(path)), mimetype="application/json")
+        files = natsorted(os.listdir(path))
+
+        return Response(json.dumps(files), mimetype="application/json")
     except FileNotFoundError:
         return Response("FileNotFoundError", status=404)
 
@@ -166,17 +169,17 @@ def analysis():
         for i in range(len(amus)):
             amus[i] = int(amus[i])
 
-        print(request.form)
         bgstart = int(request.form["bgstart"])
         bgend = int(request.form["bgend"])
+        avgstart = int(request.form["avgstart"])
+        avgend = int(request.form["avgend"])
         ibeam  = float(request.form["beamcurrent"])
         texp   = float(request.form["exptime"])
 
-        results = data.analyze(inpath, bgstart, bgend, texp, ibeam, amus)
+        results, files = data.analyze(inpath, bgstart, bgend, avgstart, avgend, texp, ibeam, amus)
         appmodel.results = results
         save_output(results)
-
-        return Response(json.dumps(results), mimetype="application/json")
+        return Response(json.dumps({"data": results, "files":files}), mimetype="application/json")
 
 @app.route("/svg2png", methods=["GET"])
 def save_svg():

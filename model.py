@@ -6,6 +6,8 @@ class AppModel():
         self.analysis_params = {
             "bg_start":0,
             "bg_end":75,
+            "avg_start":100,
+            "avg_end": 150,
             "beam_current":0.1,
             "exposure_time":2,
         }
