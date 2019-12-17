@@ -178,7 +178,10 @@ def analysis():
 
         results, files = data.analyze(inpath, bgstart, bgend, avgstart, avgend, texp, ibeam, amus)
         appmodel.results = results
-        save_output(results)
+        # save_output(results)
+        filename = appmodel.datafolder + ".xlsx"
+        savepath = os.path.join(APP_ROOT, "output", filename)
+        data.write_excel(results, files, savepath)
         return Response(json.dumps({"data": results, "files":files}), mimetype="application/json")
 
 @app.route("/svg2png", methods=["GET"])

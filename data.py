@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pandas.io.formats.excel
 import os
 
 from natsort import natsorted
@@ -50,9 +51,6 @@ def read_extrel(fname):
         scan_table.loc[i] = s
     return scan_table
 
-def read_msd(path):
-    return pd.read_csv(path, index_col="index")
-
 def analyze(dir, bgstart, bgend, avgstart, avgend, exptime, beamcurrent, amulist):
     exposures = load_all(dir)
     filenames = natsorted(os.listdir(dir))
@@ -78,6 +76,37 @@ def analyze(dir, bgstart, bgend, avgstart, avgend, exptime, beamcurrent, amulist
             dataByAmu[amu] = {"integral": integral, "signal": signal, "average": average}
         dataByFile[file] = dataByAmu
     return dataByFile, filenames
+
+def write_excel(data, files, path):
+    #initilize excel editor
+    writer = pd.ExcelWriter(path, engine='xlsxwriter')
+    pandas.io.formats.excel.ExcelFormatter.header_style=None
+
+    workbook=writer.book
+    worksheet=workbook.add_worksheet('Result')
+    writer.sheets['Result'] = worksheet
+
+    #information to track file position
+    nfiles  = len(files)
+    spacing = 2
+    block   = 0
+    amus = data[files[0]].keys()
+    for amu in amus:
+        amu_frame = pd.DataFrame(columns=["integral", "signal", "average"], index=files)
+        for file in files:
+            row = data[file][amu]
+            amu_frame.loc[file] = row
+
+        #write the block header [AMU value]
+        y = block*(nfiles + spacing + 2)
+        worksheet.write_string(y, 0, "AMU")
+        worksheet.write_number(y, 1, amu)
+
+        #write the data
+        amu_frame.to_excel(writer, sheet_name='Result', startrow=y+1 , startcol=0)
+        block+=1
+
+    writer.save()
 
 def load_all(dir):
     """returns a list of data extracted from all exposure files. One element=one exposure"""

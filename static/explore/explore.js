@@ -526,7 +526,7 @@ function getBarSize(n, chartWidth, maxBarWidth){
 }
 
 function exportGraph(){
-  /* download graph as PNG image. */
+  /* download graph as PNG image using the saveSvgAsPng library. */
   svg = $("#graph > svg").get(0)
   saveSvgAsPng(svg, selectedFile+".png", {scale:4});
 }
