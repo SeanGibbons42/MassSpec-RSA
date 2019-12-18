@@ -162,3 +162,15 @@ background-color: #f1f1f1;
 .invis{
   visibility: hidden;
 }
+
+.h-90{
+  height: 90%;
+}
+
+.h-10{
+  height: 10%;
+}
+
+.vscroll{
+  overflow-y: scroll;
+}

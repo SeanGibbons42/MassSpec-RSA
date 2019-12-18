@@ -155,7 +155,7 @@ def delfolder():
 @app.route("/run", methods=["GET", "POST"])
 def analysis():
     if request.method == "GET":
-        return Response(json.dumps(appmodel.results), mimetype="application/json")
+        return Response(json.dumps({"data":appmodel.results, "files":appmodel.filelist}), mimetype="application/json")
 
     if request.method == "POST":
         foldername = appmodel.datafolder

@@ -21,3 +21,5 @@ class AppModel():
         self.open_file = None
         #Results from last analysis run
         self.results = None
+
+        self.filelist = None
