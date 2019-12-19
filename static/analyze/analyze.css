@@ -12,8 +12,22 @@
    margin-top: 10px;
 }
 
+.analysis-label-row{
+  /* padding: 0px 15px; */
+  margin: 0px 20px;
+}
 
+.analysis-label-row label{
+  margin: 0px;
+}
 
 .analysis-row{
   margin: 15px 5px;
+}
+
+.analysis-row-rng{
+  margin-bottom: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
 }
