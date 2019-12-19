@@ -67,7 +67,7 @@ def analyze(dir, bgstart, bgend, avgstart, avgend, exptime, beamcurrent, amulist
             integral = integrate(amuData)
             csum = np.cumsum(amuData[avgstart:avgend+1])
             #signal is integral/n electrons
-            nelectron = (beamcurrent*exptime)/1.602e-19
+            nelectron = (beamcurrent*1e-6*exptime)/1.602e-19
             signal = integral/nelectron
             #return the average of the cumulative sum
             average = csum.mean()

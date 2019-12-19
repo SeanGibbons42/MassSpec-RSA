@@ -178,6 +178,7 @@ def analysis():
 
         results, files = data.analyze(inpath, bgstart, bgend, avgstart, avgend, texp, ibeam, amus)
         appmodel.results = results
+        appmodel.filelist = files
         # save_output(results)
         filename = appmodel.datafolder + ".xlsx"
         savepath = os.path.join(APP_ROOT, "output", filename)
