@@ -8,6 +8,7 @@
     upload_url = "{{ url_for('upload_folder') }}"
     del_folder_url = "{{ url_for('delfolder') }}"
     activeFolderUrl = "{{ url_for('activefolder') }}"
+    summary_url = "{{ url_for('make_summary') }}"
   </script>
   <script type="text/javascript" src="{{ url_for('static', filename='upload/upload.js') }}"></script>
 {% endblock %}

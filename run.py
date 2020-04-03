@@ -11,7 +11,7 @@ import webbrowser
 from threading import Timer
 
 from flask import Flask, Response, request, render_template, jsonify, send_from_directory, send_file
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.debug = True
@@ -76,7 +76,7 @@ def explore_page():
     """ returns the exploratory analysis page """
     path = os.path.join(app.config["UPLOAD_FOLDER"], appmodel.datafolder)
     if path:
-        filelist = natsorted(os.listdir(path))
+        filelist = natsorted(data.list_contents(path))
     else:
         filelist = []
     return render_template("explore.html", filelist = filelist)
@@ -95,7 +95,7 @@ def filelist():
     path = os.path.join(app.config["UPLOAD_FOLDER"], folder)
 
     try:
-        files = natsorted(os.listdir(path))
+        files = natsorted(data.list_contents(path))
 
         return Response(json.dumps(files), mimetype="application/json")
     except FileNotFoundError:
@@ -136,6 +136,14 @@ def upload_folder():
         #save the file to the requested folder
         file.save(os.path.join(savepath, secure_filename(filename)))
         return Response("saved", status=200)
+
+@app.route("/summary", methods = ["POST"])
+def make_summary():
+    """ creates a summary.json file for the specified folder. """
+    folder = request.form["folder"]
+    dir = os.path.join(app.config["UPLOAD_FOLDER"], folder)
+    data.folder_summary(dir)
+    return Response("done", status=200)
 
 @app.route("/folder-delete", methods=["POST"])
 def delfolder():

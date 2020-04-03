@@ -44,6 +44,7 @@ function uploadFolder(dialog, fileElement, outputElement){
     sendFile(file, name, folder);
   });
 
+  makeSummaryFile(folder);
   $(outputElement).val(folder);
 }
 
@@ -65,6 +66,13 @@ function sendFile(file, name, folder){
       fileProgressInc(nfiles);
     },
   });
+}
+
+function makeSummaryFile(folder){
+  $.ajax(summary_url, {
+    data: {folder: folder},
+    method: "POST",
+  })
 }
 
 function setActiveFolder(folder){

@@ -1,3 +1,4 @@
+import json
 import numpy as np
 import pandas as pd
 import pandas.io.formats.excel
@@ -51,9 +52,48 @@ def read_extrel(fname):
         scan_table.loc[i] = s
     return scan_table
 
+def peek_file(dir, name):
+    """ given a directory path and filename, peek_file will return the amu range and number of scans.
+        This data is intended to be stored in a descriptor file that can be used for quick form validation.
+     """
+    fname = os.path.join(dir, name)
+    data = pd.read_csv(fname, sep='\t', header=None)
+    data.columns = ["Masses", "Intensities"]
+
+    scanheaders = data.index[data["Masses"]=="Masses"]
+    nscans = scanheaders.size
+    scan1 = data["Masses"][scanheaders[0]+1:scanheaders[1]]
+    amurange = int(float(scan1[1])), int(float(scan1[scan1.size]))
+
+    return nscans, amurange
+
+def folder_summary(dir):
+    summary = {}
+    val_bounds = {"nscans": float("inf"), "min_amu": 0, "max_amu": float("inf")}
+
+    files = list_contents(dir)
+    for file in files:
+        nscans, amurange = peek_file(dir, file)
+        summary[file] = {"nscans": nscans, "min_amu": amurange[0], "max_amu":amurange[1]}
+        val_bounds["nscans"] = nscans if nscans < val_bounds["nscans"] else val_bounds["nscans"]
+        val_bounds["min_amu"] = amurange[0] if amurange[0] > val_bounds["min_amu"] else val_bounds["min_amu"]
+        val_bounds["max_amu"] = amurange[1] if amurange[1] < val_bounds["max_amu"] else val_bounds["max_amu"]
+
+    summary["val_bounds"] = val_bounds
+
+    outfile_path = os.path.join(dir, "summary.json")
+    with open(outfile_path, 'w+') as outfile:
+        json.dump(summary, outfile)
+
+def list_contents(dir):
+    """ wrapper on os.listdir, such that only txt files are returned """
+    all_contents = os.listdir(dir)
+    return [folder for folder in all_contents if folder.endswith(".txt")]
+
+
 def analyze(dir, bgstart, bgend, avgstart, avgend, exptime, beamcurrent, amulist):
     exposures = load_all(dir)
-    filenames = natsorted(os.listdir(dir))
+    filenames = natsorted(list_contents(dir))
 
     dataByFile = {}
     for file in filenames:
@@ -110,7 +150,7 @@ def write_excel(data, files, path):
 
 def load_all(dir):
     """returns a list of data extracted from all exposure files. One element=one exposure"""
-    fnames = os.listdir(dir)
+    fnames = list_contents(dir)
     exposures={}
     for fname in fnames:
         path = dir+"/"+fname
@@ -146,20 +186,16 @@ def integrate(inten):
     inten = pd.Series(inten)
     return inten.sum()
 
-def signal_strength(integral, dose):
-    """ takes the total # of counts and exposure dose for a given mass and returns counts/electron """
-    e_charge = 1.602e-19
-    num_e = dose/e_charge
-    return integral/num_e
-
 def parse_test(testfile):
     from timeit import default_timer as timer
     start = timer()
     read_extrel(testfile)
     end = timer()
     return end-start
+
 if __name__ == "__main__":
     """For testing"""
     testfile = "C:/Users/Owner/Documents/Work/Research/AnalysisTest/KA_OS4_S1dt8.txt"
+    print(peek_file("C:/Users/Owner/Documents/Work/Research/AnalysisTest/", "KA_OS4_S1dt8.txt"))
     print(parse_test(testfile))
-    print(read_extrel(testfile))
+    # print(read_extrel(testfile))
